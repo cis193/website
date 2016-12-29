@@ -1,7 +1,7 @@
 title = "CIS 19X - Go Programming"
 baseurl = "http://seas.upenn.edu/~cis19x/"
 languageCode = "en-us"
-theme = "hugo-lithium-theme"
+theme = "cis19x-theme"
 
 [permalinks]
     post = "/:year/:month/:day/:title/"
