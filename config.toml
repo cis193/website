@@ -1,3 +1,4 @@
-title = "My New Hugo Site"
-baseurl = "http://example.org/"
+title = "CIS 19X - Go Programming"
+baseurl = "http://seas.upenn.edu/~cis19x/"
 languageCode = "en-us"
+theme = "hugo-lithium-theme"
