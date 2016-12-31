@@ -2,7 +2,12 @@
 
 <main class="content" role="main">
 
+  <div class="article-content">
+    {{ .Content }}
+  </div>
+
   <div class="archive">
+    <h1>Announcements</h1>
     {{ range .Data.Pages.GroupByDate "2006"  }}
     <h2 class="archive-title">{{ .Key }}</h2>
     {{ range where .Pages "Section" "post" }}
