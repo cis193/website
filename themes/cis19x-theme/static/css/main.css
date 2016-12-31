@@ -321,3 +321,11 @@ table.schedule {
 .schedule th {
   background-color: #DDD;
 }
+
+.schedule td {
+  padding: 4px 10px;
+}
+
+.schedule td:nth-of-type(-n+2) {
+  text-align: center;
+}
