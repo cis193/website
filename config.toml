@@ -10,6 +10,9 @@ theme = "cis19x-theme"
 [[menu.main]]
     name = "Schedule"
     url = "/schedule/"
+[[menu.main]]
+    name = "Syllabus"
+    url = "/syllabus/"
 
 [params]
     description = "Go Programming"
