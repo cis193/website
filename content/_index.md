@@ -6,7 +6,7 @@ date = "2016-12-30T20:10:46-05:00"
 
 # Go Programming (Spring 2017)
 
-Welcome! The course will meet TBD!
+Welcome! The course will meet Tuesdays 10:30 – 12:00pm in Towne 315!
 
 ## Course Description
 
