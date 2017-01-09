@@ -1,5 +1,5 @@
 title = "CIS 193 – Go Programming"
-baseurl = "http://seas.upenn.edu/~cis193/"
+baseurl = "//www.seas.upenn.edu/~cis193/"
 languageCode = "en-us"
 theme = "cis19x-theme"
 
