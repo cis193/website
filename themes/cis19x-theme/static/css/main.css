@@ -329,3 +329,10 @@ table.schedule {
 .schedule td:nth-of-type(-n+2) {
   text-align: center;
 }
+
+img.staff {
+  border-radius: 50%;
+  height: 125px;
+  float: left;
+  margin: 1em 2em 0 0;
+}
