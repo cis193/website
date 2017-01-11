@@ -17,8 +17,14 @@ This schedule will be filled as the semester progresses. Stay tuned!
     </thead>
     <tr>
         <td>0</td>
-        <td>TBD</td>
+        <td>1/17</td>
         <td>00 – Course Introduction</td>
-        <td>HW00 – Finger Exercises</td>
+        <td>HW00 – Hello Go</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>1/24</td>
+        <td>01 – Basic Syntax</td>
+        <td>HW01 – Finger Exercises</td>
     </tr>
 </table>
