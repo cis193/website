@@ -40,3 +40,27 @@ questions or concerns.
 - Homework: 60%
 - Final project: 30%
 - Participation: 10%
+
+## Academic Integrity
+
+In the spirit of collaboration and open source development, we highly encourage:
+
+ - Sharing of resources
+ - Sharing of inspiration
+ - Sharing these things on Piazza
+ - Helping out classmates on Piazza
+ - Collaboration at a low level (syntax)
+ - Collaboration at a high level (conceptual)
+
+As in most CIS courses, the internet is your friend. You are expected and
+encouraged to find resources online that will help you learn the material and
+complete the assignments.
+
+You should not share code with others in the course (except on group projects).
+You should not discuss the exact solutions to mid-level programming problems.
+You should not be asking a stranger to finish your work for you or copying and
+pasting what you find online for submission. Use common sense.
+
+See the
+[Code of Academic Integrity](http://www.upenn.edu/academicintegrity/ai_codeofacademicintegrity.html)
+for more details.
