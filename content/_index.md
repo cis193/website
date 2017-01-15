@@ -35,3 +35,17 @@ questions or concerns.
 - *The Go Programming Language* by Alan Donovan and Brian Kernighan
 - *Go In Action​* by William Kennedy
 - *Programming in Go* by Mark Summerfield
+
+
+## Shared Lecture
+
+The CIS19X common lectures will be held 4 times at the beginning of the
+semester, and will be taught by Joe Devietti. The topics will be:
+
+- Command line (1/18)
+- Git (1/25)
+- HTTP and DNS (2/1)
+- HTML and CSS (2/8)
+
+We will assume you are familiar with these topics, so be sure to attend if you
+are unfamiliar with any of these topics or need to brush up.
