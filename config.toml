@@ -26,3 +26,6 @@ theme = "cis19x-theme"
     width = 50
     height = 50
     alt = "Go Logo"
+
+[blackfriday]
+    fractions = false
