@@ -1,0 +1,979 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Course Introduction</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>Course Introduction</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>What is Go?</h3>
+        
+  
+  <p>
+    Go is a new, general-purpose programming language.
+  </p>
+  
+
+  <ul>
+  
+    <li>Statically typed</li>
+  
+    <li>Compiled</li>
+  
+    <li>Productive</li>
+  
+    <li>Concurrent</li>
+  
+  </ul>
+
+  
+  <p>
+    &#34;Go’s purpose is therefore not to do research into programming language design; it is to improve the working environment for its designers and their coworkers. Go is more about software engineering than programming language research. Or to rephrase, it is about language design in the service of software engineering.&#34;
+<br>
+
+    - Rob Pike
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Why use Go?</h3>
+        
+  
+  <p>
+    Go is designed for speed, efficiency and infrastructure and is particularly proficient at concurrent systems programming.
+  </p>
+  
+
+  <ul>
+  
+    <li>Blazing fast</li>
+  
+    <li>Rich standard library</li>
+  
+    <li>Designed for developer efficiency</li>
+  
+    <li>Memory safe (no buffer overflows, no pointer arithmetic)</li>
+  
+    <li>Garbage collected</li>
+  
+    <li>Easy to use</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>History of Go</h3>
+        
+  <ul>
+  
+    <li>Created by Google engineers Rob Pike, Ken Thompson and Robert Griesemer</li>
+  
+    <li>Designed to be a better version of C++ for the 21st century</li>
+  
+    <li>Highly opinionated for efficiency and lower build times</li>
+  
+    <li>Version 1.0 released in March 2012</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="images/gopher.png" height="220" width="160">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Who uses Go?</h3>
+        
+  <ul>
+  
+    <li>Google!</li>
+  
+    <li>Uber</li>
+  
+    <li>Mozilla</li>
+  
+    <li>Facebook</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="images/golang.png" width="700">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Class Goals &amp; Prerequisites</h3>
+        
+  <ul>
+  
+    <li>Prerequisites: CIS 120 (or instructor permission)	</li>
+  
+    <li>This class: Go 1.6 and up</li>
+  
+    <li>Aims to offer a survey of Go and apply it to practical, real world uses</li>
+  
+    <li>Give us feedback - this class is new!</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Topics Covered (tentative)</h3>
+        
+  <ul>
+  
+    <li>Basic Go</li>
+  
+    <li>Concurrency &amp; Parallelism</li>
+  
+    <li>Goroutines &amp; Channels</li>
+  
+    <li>Pointers, structs, methods in composition-based object oriented programming</li>
+  
+    <li>Cross-platform systems programming, I/O, C FFI</li>
+  
+    <li>Testing, packaging, and error-handling</li>
+  
+    <li>Web scraping</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Syllabus and Grading</h3>
+        
+  <ul>
+  
+    <li>Homework (60%): 7 to 8 homework assignments, due on Tuesdays at 11:59 PM the week after they&#39;re assigned (unless otherwise specified)</li>
+  
+    <li>Project (30%): More info later, fairly flexible, goal is to make something cool with Go!</li>
+  
+    <li>Participation (10%): based on attendance</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homeworks</h3>
+        
+  <ul>
+  
+    <li><b>Correctness</b>: 80 points total, Code works as expected, passes all test cases (autograded)</li>
+  
+    <li><b>Style</b>: 20 points total, 10 points for passing <b>gofmt</b> (autograded), 10 points for best practices and style (manually graded)</li>
+  
+    <li>This class will follow this <a href="https://github.com/golang/go/wiki/CodeReviewComments" target="_blank">style guide</a></li>
+  
+  </ul>
+
+  
+  <p>
+    Late Policies
+  </p>
+  
+
+  <ul>
+  
+    <li>Four total late days, which give 24 hours each</li>
+  
+    <li>Can&#39;t use more than two late days on one assignment</li>
+  
+    <li>If you submit an assignment more than two days late (or have run out of late days), there will be a deduction of 20% per day late</li>
+  
+    <li>Homework submission will be on Canvas</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Academic Integrity</h3>
+        
+  <ul>
+  
+    <li>Don&#39;t cheat or copy/paste code from online sources</li>
+  
+    <li>Low level discussion is okay: <i>What&#39;s the syntax for integers in Go?</i></li>
+  
+    <li>High level discussion is okay: <i>What concepts are required for this homework?</i></li>
+  
+    <li>Mid level discussion is <b>not okay</b>: <i>How did you do the second function in homework 2?</i></li>
+  
+    <li>We will abide by <a href="http://www.upenn.edu/academicintegrity/" target="_blank">Penn&#39;s Academic Integrity Policy</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Class Structure and Resources</h3>
+        
+  <ul>
+  
+    <li>Class meets every Tuesday at 10:30 AM in Towne 315</li>
+  
+    <li>CIS 19X Lecture (optional): Wednesday 6 PM - 7:30 PM, Towne 100 (not every week)</li>
+  
+    <li>Course website: <a href="https://www.seas.upenn.edu/~cis193/" target="_blank">www.seas.upenn.edu/~cis193/</a></li>
+  
+    <li>Lectures and homeworks will be posted on the website</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+    <li>Optional textbook: <a href="http://www.gopl.io/" target="_blank">The Go Programing Language</a></li>
+  
+    <li>Go documentation!</li>
+  
+    <li>Homework submission is on Canvas</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Instructors</h3>
+        
+  
+  <p>
+    Prakhar Bhandari
+<br>
+
+    - CIS senior
+<br>
+
+    - <a href="prakharb@seas.upenn.edu" target="_self">prakharb@seas.upenn.edu</a>
+<br>
+
+    - OH: TBD
+  </p>
+  
+
+  
+  <p>
+    Adel Qalieh
+<br>
+
+    - Computational Biology senior
+<br>
+
+    - <a href="adelq@seas.upenn.edu" target="_self">adelq@seas.upenn.edu</a>
+<br>
+
+    - OH: TBD
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Go Installation &amp; GOPATH</h3>
+        
+  <ul>
+  
+    <li>Install Go from <a href="https://golang.org/doc/install" target="_blank">golang.org/doc/install</a></li>
+  
+    <li>Supports Windows, Mac OS X, Linux, and FreeBSD</li>
+  
+    <li>Set your <b>GOPATH</b> with these <a href="https://golang.org/doc/code.html#GOPATH" target="_blank">instructions</a></li>
+  
+    <li>The GOPATH environment variable is the location of your workspace - it&#39;s where Go packages you install will live</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Your First Go Program!</h3>
+        
+  <div class="code playground" >
+
+
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import &#34;fmt&#34;</span>
+<span num="4"></span>
+<span num="5">func main() {</span>
+<span num="6">    fmt.Println(&#34;Hello, 世界!&#34;)</span>
+<span num="7">}</span>
+</pre>
+
+
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Running Go Programs</h3>
+        
+  
+  <p>
+    The <code>go</code> tool is the de facto standard for building and installing Go code.
+  </p>
+  
+
+  
+  <p>
+    Compile and run a single-file program:
+  </p>
+  
+
+  
+  <div class="code"><pre>$ go run hello.go
+hello world</pre></div>
+  
+
+  
+  <p>
+    Build a single-file program
+  </p>
+  
+
+  
+  <div class="code"><pre>$ go build hello.go
+$./hello
+hello world</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Lexical Structure</h3>
+        
+  
+  <p>
+    Everything in Go is UTF-8, <code>.go</code> source files are encoded in UTF-8, strings are interpreted as UTF-8
+  </p>
+  
+
+  
+  <p>
+    Comments
+  </p>
+  
+
+  
+  <div class="code"><pre>/* This is a comment; no nesting */
+// So is this.</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Variables</h3>
+        
+  <ul>
+  
+    <li>var <i>name type</i> = expression</li>
+  
+    <li>Either <i>type</i> or <i>expression</i> can be omitted</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>var i int = 9 // sets int i = 9
+var i = 9     // sets int i = 9</pre></div>
+  
+
+  
+  <p>
+    Variables initialize to their <i>zero values</i>
+  </p>
+  
+
+  
+  <div class="code"><pre>int j     // int j is equal to 0
+string s  // string s is equal to &#34;&#34;</pre></div>
+  
+
+  
+  <p>
+    Multiple variables
+  </p>
+  
+
+  
+  <div class="code"><pre>var i, j, k int                 // int, int, int
+var b, f, s = true, 2.3, &#34;four&#34; // bool, float64, string</pre></div>
+  
+
+  
+  <p>
+    Short declarations
+  </p>
+  
+
+  
+  <div class="code"><pre>i := 4
+t := &#34;Hello!&#34;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Basic Data Types</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Integers</h3>
+        
+  
+  <div class="code"><pre>i := 6 // the type of i is int</pre></div>
+  
+
+  
+  <p>
+    Integer types (signed)
+<br>
+
+    - int, int8, int16, int32 (aka rune), and int64
+  </p>
+  
+
+  
+  <p>
+    Integer types (unsigned)
+<br>
+
+    - uint, uint8 (aka byte), uint16, uint32, and uint64
+  </p>
+  
+
+  
+  <p>
+    Binary Operators
+  </p>
+  
+
+  
+  <div class="code"><pre>* / % &lt;&lt; &gt;&gt; &amp; &amp;^ &#43;-|^
+== != &lt; &lt;= &gt; &gt;=
+&amp;&amp; ||</pre></div>
+  
+
+  
+  <p>
+    Statically typed
+  </p>
+  
+
+  
+  <div class="code"><pre>var apples int32 = 1
+var oranges int16 = 2
+var compote int = apples &#43; oranges // compile error
+var compote int = int(apples) &#43; int(oranges) // correct way</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Floats</h3>
+        
+  
+  <div class="code"><pre>f := 6.5 // the type of f is float65</pre></div>
+  
+
+  
+  <p>
+    Float types
+<br>
+
+    - float32: around 6 digits of accuracy
+<br>
+
+    - float64: around 15 digits of accuracy
+  </p>
+  
+
+  
+  <div class="code"><pre>var z float64
+fmt.Println(z, -z, 1/z, -1/z, z/z) //  &#34;0 -0 &#43;Inf -Inf NaN&#34;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Booleans</h3>
+        
+  <ul>
+  
+    <li>true</li>
+  
+    <li>false</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>x &gt;= 4 &amp;&amp; x &lt; 6</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Strings</h3>
+        
+  <ul>
+  
+    <li>Immutable sequence of bytes</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>s := &#34;Hello world!&#34;
+fmt.Println(len(s)) // &#34;12&#34;</pre></div>
+  
+
+  <ul>
+  
+    <li>The ith byte is not always the ith character </li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>s := &#34;世界&#34;
+fmt.Println(len(s)) // &#34;6&#34;</pre></div>
+  
+
+  <ul>
+  
+    <li>s[i:j] yields new strings (can also use s[i:], s[:i] or s[:])</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Control Structures</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>If</h3>
+        
+  
+  <p>
+    Basic <code>if</code> structure 
+  </p>
+  
+
+  
+  <div class="code"><pre>if x &lt; 5 { 
+    // do something
+} else if x &gt; 8 {
+    // do something
+} else {
+    // do something
+}</pre></div>
+  
+
+  
+  <p>
+    Basic initialization statement allowed; requires semicolon
+  </p>
+  
+
+  
+  <div class="code"><pre>if v := f(); v &lt; 10 {
+    fmt.Printf(&#34;%d is less than 10&#34;, v)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>For</h3>
+        
+  
+  <p>
+    Basic form
+  </p>
+  
+
+  
+  <div class="code"><pre>for i := 0; i &lt; 10; i&#43;&#43; { 
+    // something
+}</pre></div>
+  
+
+  
+  <p>
+    No <code>while</code> keyword in Go
+  </p>
+  
+
+  
+  <div class="code"><pre>i := 1
+for i &lt;= 3 {
+    fmt.Println(i)
+    i = i &#43; 1
+}
+
+for { 
+    // do something indefinitely
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Switch</h3>
+        
+  
+  <p>
+    More powerful than C&#39;s switch statement
+  </p>
+  
+
+  
+  <div class="code"><pre>switch coinflip() {
+case &#34;heads&#34;, &#34;Heads&#34;:
+    heads&#43;&#43;
+case &#34;tails&#34;:
+    tails&#43;&#43;
+default:
+    fmt.Println(&#34;landed on edge!&#34;)
+}</pre></div>
+  
+
+  
+  <p>
+    Can also use expressions
+  </p>
+  
+
+  
+  <div class="code"><pre>t := f()
+switch {
+case t &lt; -1 &amp;&amp; t &gt; -5:
+    // something
+case t &gt; 7:
+    // something
+default:
+    // something
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Functions</h3>
+        
+  
+  <p>
+    Function syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>func name(parameter-list) (result-list) { 
+    body
+}</pre></div>
+  
+
+  
+  <p>
+    Example function
+  </p>
+  
+
+  
+  <div class="code"><pre>func doubled(a int, b int) (int, int) {
+    return 2 * a, 2 * b
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Packages</h3>
+        
+  <ul>
+  
+    <li>Go code lives in packages</li>
+  
+    <li>Executable commands must always use package main</li>
+  
+    <li>Packages contain type, function, variable, and constant declarations</li>
+  
+    <li>First letter case determines visibility: Foo is exported, foo is not</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>gofmt</h3>
+        
+  <ul>
+  
+    <li>Intended to do automatic code formatting</li>
+  
+    <li>Eliminates debates on style</li>
+  
+    <li>More information <a href="https://golang.org/cmd/gofmt/" target="_blank">here</a></li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>gofmt -w yourcode.go</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 0</h3>
+        
+  <ul>
+  
+    <li>Go finger exercises</li>
+  
+    <li>Available on the course website</li>
+  
+    <li>Due on Canvas on Tuesday, January 24th at 11:59 PM</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>
