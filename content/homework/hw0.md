@@ -1,6 +1,5 @@
 +++
 title = "Homework 0"
-link = "hw0"
 
 +++
 
