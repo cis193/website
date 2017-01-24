@@ -6,7 +6,7 @@ theme = "cis19x-theme"
 [permalinks]
     post = "/:year/:month/:day/:title/"
     page = "/:title/"
-    homework = "/:filename/"
+    homework = "/homework/:filename/"
 
 [[menu.main]]
     name = "Schedule"
