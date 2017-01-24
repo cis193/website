@@ -24,7 +24,7 @@ This schedule will be filled as the semester progresses. Stay tuned!
     <tr>
         <td>1</td>
         <td>1/24</td>
-        <td>01 – Basic Syntax</td>
+        <td><a href="/~cis193/lectures/Data%20Structures.html">01 – Data Structures</a></td>
         <td><a href="/~cis193/homework/hw1/">HW01 – Finger Exercises</a></td>
     </tr>
 </table>

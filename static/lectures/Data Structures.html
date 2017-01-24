@@ -1,0 +1,845 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Structures</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>Data Structures</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 0 (available on course website) is due today on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Constants</h3>
+        
+  
+  <div class="code"><pre>const a = 3
+const (
+    x, y                = 1, 2
+    base, width, height = 3, 3, 4
+    name                = &#34;Test&#34;
+)</pre></div>
+  
+
+  <ul>
+  
+    <li>Evaluation happens at compile time</li>
+  
+    <li>Basic data types: boolean, string, number</li>
+  
+  </ul>
+
+  
+  <p>
+    <b>iota</b> starts at 0 and increments
+  </p>
+  
+
+  
+  <div class="code"><pre>const (
+    Sunday = iota  // Sunday = 0
+    Monday         // Monday = 1
+    Tuesday        // Tuesday = 2
+    ...
+    Saturday       // Saturday = 6
+)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Type Declarations</h3>
+        
+  
+  <p>
+    Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>type name underlying-type</pre></div>
+  
+
+  
+  <p>
+    Example
+  </p>
+  
+
+  
+  <div class="code"><pre>type Mile float64
+type Kilometer float64</pre></div>
+  
+
+  
+  <p>
+    Why is this useful?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Go Scope</h3>
+        
+  
+  <p>
+    Scope is a compile time property
+<br>
+
+    Not visible outside the lexical block it is declared inside
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    x := &#34;cis 193&#34;
+    for i := 0; i &lt; len(x); i&#43;&#43; {
+        x := x[i]
+        if i &lt; 3 {
+            x := x &#43; &#39;A&#39; - &#39;a&#39;
+            fmt.Printf(&#34;%c\n&#34;, x) // &#34;CIS&#34;
+        }
+    }
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Strings</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Review of Strings</h3>
+        
+  <ul>
+  
+    <li>Immutable sequence of bytes</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>s := &#34;Hello world!&#34;
+fmt.Println(len(s)) // &#34;12&#34;</pre></div>
+  
+
+  <ul>
+  
+    <li>The ith byte is not always the ith character </li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>s := &#34;世界&#34;
+fmt.Println(len(s)) // &#34;6&#34;</pre></div>
+  
+
+  <ul>
+  
+    <li><code>s[i:j]</code> yields new strings (can also use <code>s[i:]</code>, <code>s[:i]</code> or <code>s[:]</code>)</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Working with Runes</h3>
+        
+  <ul>
+  
+    <li>A rune is a synonym for int32</li>
+  
+    <li>Indicates that value is a Unicode code point</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>import &#34;unicode/utf8&#34;
+s := &#34;Hello, 世界&#34;
+fmt.Println(len(s)) // &#34;13&#34; 
+fmt.Println(utf8.RuneCountInString(s)) // &#34;9&#34;</pre></div>
+  
+
+  <ul>
+  
+    <li>Iterating over runes</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>for i := 0; i &lt; len(s); {
+    r, size := utf8.DecodeRuneInString(s[i:])
+    fmt.Printf(&#34;Rune #%d is %c\n&#34;, i, r)
+    i &#43;= size
+}</pre></div>
+  
+
+  <ul>
+  
+    <li>See the <a href="https://golang.org/pkg/unicode/utf8/" target="_blank">unicode/utf8 documentation</a> for more information</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Easier Iteration Techniques</h3>
+        
+  <ul>
+  
+    <li>Use the <b>range</b> clause</li>
+  
+  </ul>
+
+  
+  <div class="code"><pre>for i, r := range &#34;Hello, 世界&#34; { 
+    fmt.Printf(&#34;Index %d has rune: %c\n&#34;, i, r)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>String Formatting</h3>
+        
+  
+  <p>
+    What do these do?
+  </p>
+  
+
+  <ul>
+  
+    <li>fmt.Println</li>
+  
+    <li>fmt.Print</li>
+  
+    <li>fmt.Printf</li>
+  
+    <li>fmt.Sprintf</li>
+  
+    <li>fmt.Fprintf</li>
+  
+    <li>...</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Printing Verbs</h3>
+        
+  
+  <p>
+    Useful verbs
+  </p>
+  
+
+  <ul>
+  
+    <li><b>%v:</b> Value in default format</li>
+  
+    <li><b>%T:</b> Type</li>
+  
+    <li><b>%d:</b> base 10 number</li>
+  
+    <li><b>%f:</b> floating point number without the exponent</li>
+  
+    <li><b>%q:</b> a single-quoted character literal</li>
+  
+    <li><b>%x:</b> Base 16, with lowercase a-f</li>
+  
+    <li><b>%p:</b> pointer address</li>
+  
+  </ul>
+
+  
+  <p>
+    See <a href="https://golang.org/pkg/fmt/" target="_blank">golang.org/pkg/fmt/</a> for all printing verbs.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Advanced String Formatting</h3>
+        
+  
+  <p>
+    Precision and padding
+  </p>
+  
+
+  <ul>
+  
+    <li><b>%.2f:</b> Two decimal places of precision </li>
+  
+    <li><b>%6.1f:</b> Width of six characters, with one decimal place of precision</li>
+  
+    <li><b>%-6.1f:</b> Left aligned</li>
+  
+    <li><b>%06d:</b> Zero padded</li>
+  
+    <li><b>%6s:</b> String padded to six characters</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Composite Data Types</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Arrays</h3>
+        
+  
+  <p>
+    Fixed length sequence of zero or more elements of the same type
+  </p>
+  
+
+  
+  <p>
+    Example
+  </p>
+  
+
+  
+  <div class="code"><pre>var arr [4]int // array of 4 integers</pre></div>
+  
+
+  
+  <p>
+    Array Literals
+  </p>
+  
+
+  
+  <div class="code"><pre>var arr [3]int = [3]int{1, 2, 4}
+var arr [3]int = [3]int{1, 2} // arr[2] = 0
+
+arr := [...]int{1, 2, 3, 4}
+arr := [...]int{10: -1} // array of length 11 with the last index = -1, all else = 0</pre></div>
+  
+
+  
+  <p>
+    Not passed by reference, a new copy is made for any function call
+  </p>
+  
+
+  
+  <p>
+    Can be compared with == operator
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Slices</h3>
+        
+  
+  <p>
+    Variable length sequence of the same type
+  </p>
+  
+
+  
+  <p>
+    Has three components
+  </p>
+  
+
+  <ul>
+  
+    <li>pointer</li>
+  
+    <li>length: <b>len()</b></li>
+  
+    <li>capacity: <b>cap()</b></li>
+  
+  </ul>
+
+  
+  <p>
+    Passed by reference - much more frequently used than arrays
+  </p>
+  
+
+  
+  <p>
+    Cannot compare with == operator
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Slice gotchas</h3>
+        
+  
+  <p>
+    Slices are pointers to an underlying array
+  </p>
+  
+
+  
+  <div class="code"><pre>months := [...]string{&#34;&#34;, &#34;January&#34;, &#34;February&#34;, &#34;March&#34;, 
+                      &#34;April&#34;, &#34;May&#34;, &#34;June&#34;, 
+                      &#34;July&#34;, &#34;August&#34;, &#34;September&#34;, 
+                      &#34;October&#34;, &#34;November&#34;, &#34;December&#34;}
+
+myFaveMonths := months[4:7] // [April May June]
+summer := months[6:9]       // [June July August]</pre></div>
+  
+
+  
+  <p>
+    What is <code>summer[:5]</code>?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Slice Operations</h3>
+        
+  
+  <p>
+    Creating slices
+  </p>
+  
+
+  
+  <div class="code"><pre>make([]Type, len, cap)
+make([]Type, len)  // cap = len
+
+var variableName []Type</pre></div>
+  
+
+  
+  <p>
+    Appending to slices
+  </p>
+  
+
+  
+  <div class="code"><pre>var runes []rune
+for _, r := range &#34;Hello&#34; {
+    runes := append(runes, r)
+}</pre></div>
+  
+
+  
+  <p>
+    Is there an easier way of doing the above functionality?
+  </p>
+  
+
+  
+  <div class="code"><pre>a = append(a, 1)
+a = append(a, 1, 2, 3)
+a = append(a, a...) // supplies a list of arguments from a slice</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Maps</h3>
+        
+  
+  <div class="code"><pre>map[K]V</pre></div>
+  
+
+  
+  <p>
+    Creating maps
+  </p>
+  
+
+  
+  <div class="code"><pre>ages := make(map[string]int)
+ages := map[string]int{
+    &#34;henry&#34;: 4,
+    &#34;jim&#34;:   5,
+}</pre></div>
+  
+
+  
+  <p>
+    Adding/Deleting elements
+  </p>
+  
+
+  
+  <div class="code"><pre>ages[&#34;bob&#34;] = 32
+delete(ages, &#34;jim&#34;)</pre></div>
+  
+
+  
+  <p>
+    Maps are passed by reference
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Map Operations</h3>
+        
+  
+  <p>
+    Maps lookups where the key isn&#39;t found returns the zero value
+  </p>
+  
+
+  
+  <div class="code"><pre>ages[&#34;alice&#34;] = ages[&#34;alice&#34;] &#43; 1 // equivalent to ages[&#34;alice&#34;]&#43;&#43;</pre></div>
+  
+
+  
+  <p>
+    Iterating over maps
+  </p>
+  
+
+  
+  <div class="code"><pre>for key, value := range map {...}</pre></div>
+  
+
+  
+  <p>
+    How do we check if something is in a map?
+  </p>
+  
+
+  
+  <div class="code"><pre>age, ok := ages[&#34;steve&#34;] // ok is a boolean
+
+if age, ok := ages[&#34;steve&#34;]; !ok {...} // do something if &#34;steve&#34; not in ages</pre></div>
+  
+
+  
+  <p>
+    Can use maps as sets
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Structs</h3>
+        
+  
+  <p>
+    Aggregate data type that groups zero or more named values of arbitrary types
+  </p>
+  
+
+  
+  <div class="code"><pre>type Person struct {
+    ID     int
+    Name   string
+    Age    int
+}
+
+var jim Person
+jim.Age = 34</pre></div>
+  
+
+  
+  <p>
+    Field order matters
+<br>
+
+    Fields are only exported if uppercase first letter
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Structs Literals</h3>
+        
+  
+  <div class="code"><pre>type Point struct {
+    X, Y int
+}
+p1 := Point{1, 2}
+p2 := Point{X: 2} // Y = 0</pre></div>
+  
+
+  
+  <p>
+    If each field is comparable, structs can be compared using the == operator
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Functions</h3>
+        
+  
+  <p>
+    Function syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>func name(parameter-list) (result-list) { 
+    body
+}</pre></div>
+  
+
+  
+  <p>
+    None, one, or multiple return types
+  </p>
+  
+
+  
+  <p>
+    Result list can have variable names - why?
+  </p>
+  
+
+  
+  <div class="code"><pre>func Split(path String) (dir, file string) {...}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 1</h3>
+        
+  <ul>
+  
+    <li>Composite data structures</li>
+  
+    <li>Due on Canvas on Tuesday, January 31st at 11:59 PM</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>
