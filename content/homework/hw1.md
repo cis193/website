@@ -13,7 +13,7 @@ usage. You will need to refer to the [Go documentation](https://golang.org/doc/)
 
 ## Exercises
 
-Complete the exercises in the [`hw1.go`](/~cis193/homeworks/hw0.go) code file stub.
+Complete the exercises in the [`hw1.go`](/~cis193/homeworks/hw1.go) code file stub.
 
 Be sure that your code is run through `gofmt` and compiles successfully before
 submitting. You will be learning many Go best practices throughout the semester
