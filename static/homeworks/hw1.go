@@ -57,7 +57,7 @@ func InvertMap(kv map[string]int) map[int]string {
 // TopCharacters finds characters that appear more than k times in the string.
 // The result is the set of characters along with their occurrences.
 // This function MUST handle UTF-8 characters.
-func TopCharacters(s string) map[rune]int {
+func TopCharacters(s string, k int) map[rune]int {
 	// TODO
 	return nil
 }
