@@ -25,6 +25,6 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>1</td>
         <td>1/24</td>
         <td>01 – Basic Syntax</td>
-        <td>HW01 – Finger Exercises</td>
+        <td><a href="/~cis193/homework/hw1/">HW01 – Finger Exercises</a></td>
     </tr>
 </table>
