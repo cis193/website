@@ -49,6 +49,7 @@ func Unique(e []int) []int {
 
 // InvertMap inverts a mapping of strings to ints into a mapping of ints to strings.
 // Each value should become a key, and the original key will become the corresponding value.
+// For this function, you can assume each value is unique.
 func InvertMap(kv map[string]int) map[int]string {
 	// TODO
 	return nil
