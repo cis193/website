@@ -27,4 +27,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Data%20Structures.html">01 – Data Structures</a></td>
         <td><a href="/~cis193/homework/hw1/">HW01 – Finger Exercises</a></td>
     </tr>
+    <tr>
+        <td>2</td>
+        <td>1/31</td>
+        <td><a href="/~cis193/lectures/Object%20Oriented%20Programming.html">02 – Object Oriented Programming</a></td>
+        <td><a href="/~cis193/homework/hw2/">HW02 – Object Oriented Programming</a></td>
+    </tr>
 </table>

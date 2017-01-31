@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)http://localhost:3999/lecture2.slide#1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Object Oriented Programming</title>
+    
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src="./Object Oriented Programming_files/slides.js"></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  <meta name="viewport" content="width=1100,height=750"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+  <body style="display: none" class="loaded">
+
+    <section class="slides layout-widescreen">
+
+      <article class="current">
+        <h1>Object Oriented Programming</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article class="next">
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 1 (available on course website) is due tonight on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article class="far-next">
+      
+        <h3>Notes From Homework 0</h3>
+        
+  
+  <p>
+    Remember to run <code>gofmt</code>!
+<br>
+
+    Test your code!
+  </p>
+  
+
+  
+  <p>
+    Helpful Tools
+<br>
+
+    - <code>go</code> <code>vet</code>
+<br>
+
+    - <a href="https://github.com/golang/lint" target="_blank">golint</a>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Structs</h3>
+        
+  
+  <p>
+    Aggregate data type that groups zero or more named values of arbitrary types
+  </p>
+  
+
+  
+  <div class="code"><pre>type Person struct {
+    ID     int
+    Name   string
+    Age    int
+}
+
+var jim Person
+jim.Age = 34</pre></div>
+  
+
+  
+  <p>
+    Field order matters
+<br>
+
+    Fields are only exported if uppercase first letter
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Struct Literals</h3>
+        
+  
+  <div class="code"><pre>type Point struct {
+    X, Y int
+}</pre></div>
+  
+
+  
+  <p>
+    Values in order - every field must be included
+  </p>
+  
+
+  
+  <div class="code"><pre>p1 := Point{1, 2}</pre></div>
+  
+
+  
+  <p>
+    Field names and values
+  </p>
+  
+
+  
+  <div class="code"><pre>p2 := Point{X: 2} // Y = 0</pre></div>
+  
+
+  
+  <p>
+    Cannot use both forms in the same literal
+  </p>
+  
+
+  
+  <p>
+    If each field is comparable, structs can be compared using the == operator
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Struct Embedding </h3>
+        
+  
+  <p>
+    Instead of 
+  </p>
+  
+
+  
+  <div class="code"><pre>type Circle struct {
+    X, Y, Radius int
+}</pre></div>
+  
+
+  
+  <p>
+    We can do 
+  </p>
+  
+
+  
+  <div class="code"><pre>type Point struct {
+    X, Y int
+}
+
+type Circle struct {
+    Center Point
+    Radius int
+}</pre></div>
+  
+
+  
+  <p>
+    Why would we want to do this?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Struct Embedding</h3>
+        
+  
+  <p>
+    Accessing fields
+  </p>
+  
+
+  
+  <div class="code"><pre>var c Circle
+c.Center.X = 3
+c.Center.Y = 4
+w.Radius = 6</pre></div>
+  
+
+  
+  <p>
+    This is messy - what would be a better way?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Struct Embedding and Anonymous Fields</h3>
+        
+  
+  <div class="code"><pre>type Point struct {
+    X, Y int
+}
+
+type Circle struct {
+    Point
+    Radius int
+}</pre></div>
+  
+
+  
+  <p>
+    Accessing fields
+  </p>
+  
+
+  
+  <div class="code"><pre>var c Circle
+c.X = 3
+c.Y = 4
+w.Radius = 6</pre></div>
+  
+
+  
+  <p>
+    Point is <b>embedded</b> in Circle
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Struct Embedding and Anonymous Fields</h3>
+        
+  
+  <p>
+    How do we initialize structs with anonymous embedded fields?
+  </p>
+  
+
+  
+  <div class="code"><pre>c := Circle{X: 4, Y: 5, Radius: 8} // compile error</pre></div>
+  
+
+  
+  <p>
+    We have two options
+  </p>
+  
+
+  
+  <div class="code"><pre>c := Circle{Point{8, 8}, 5}
+c := Circle{
+    Point:  Point{X: 8, Y: 8},
+    Radius: 5, // this comma is necessary
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Recursive Structs</h3>
+        
+  
+  <p>
+    Struct type T can't have field T
+  </p>
+  
+
+  
+  <p>
+    How can we make recursive types?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Pointers</h3>
+        
+  
+  <p>
+    A variable is a piece of storage that contains a value
+  </p>
+  
+
+  
+  <p>
+    Pointers are the address of a variable, the location where a value is stored
+  </p>
+  
+
+<div class="image">
+  <img src="./Object Oriented Programming_files/pointers.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Pointer Syntax</h3>
+        
+  
+  <p>
+    Pointers allow us to read/update the value of a variable indirectly
+  </p>
+  
+
+  
+  <div class="code"><pre>var x int
+&amp;x // the "address of x", has type *int</pre></div>
+  
+
+  
+  <p>
+    <code>&amp;x</code> is a pointer to an int
+  </p>
+  
+
+  
+  <div class="code"><pre>func incr(p *int) int {
+    *p++  // doesn't change p
+    return *p
+}
+
+x := 1
+incr(&amp;x)              // x is now 2
+fmt.Println(incr(&amp;x)) // "3" (and x is 3)</pre></div>
+  
+
+  
+  <p>
+    <code>*p</code> is the variable to which <code>p</code> points to
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Pointers with Structs</h3>
+        
+  
+  <div class="code"><pre>type Person struct {
+    ID     int
+    Name   string
+    Age    int
+}
+
+var p Person
+name := &amp;p.Name
+*name = "Bob"
+
+var ptr *Person = &amp;p
+ptr.Name += " LastName"</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Recursive Structs</h3>
+        
+  
+  <div class="code"><pre>type Tree struct {
+    value       int
+    left, right *Tree
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Methods </h3>
+        
+  
+  <p>
+    Declared as a variant of the ordinary function declaration, the extra type appears before the function name
+  </p>
+  
+
+  
+  <div class="code"><pre>type Point struct {
+    X, Y float64
+}
+
+func (p Point) Distance(q Point) float64 {
+    return math.Hypot(q.X-p.X, q.Y-p.Y)
+}
+
+p := Point{1,1}
+q := Point{2,2}
+fmt.Println(p.Distance(q)) // 1.4142135623730951</pre></div>
+  
+
+  
+  <p>
+    <code>p</code> is the method's <b>receiver</b>
+  </p>
+  
+
+  
+  <p>
+    Go typically uses short receiver names, eg: first letter of the type name
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Methods with a Pointer Receiver</h3>
+        
+  
+  <p>
+    Why is it useful to use pointers as receivers?
+  </p>
+  
+
+  
+  <div class="code"><pre>func (p *Point) Scale(factor float64) {
+    p.X *= factor
+    p.Y *= factor
+}</pre></div>
+  
+
+  
+  <p>
+    Style: If one method for a type has a pointer receiver, then all should
+  </p>
+  
+
+  
+  <p>
+    Receivers can only be named types and pointers to named types
+  </p>
+  
+
+  
+  <div class="code"><pre>(Point) // ok
+(*Point) // ok
+
+type P *int
+(P) // not ok</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Receivers</h3>
+        
+  
+  <p>
+    Using a pointer receiver
+  </p>
+  
+
+  
+  <div class="code"><pre>p1 := &amp;Point{1, 1}
+p1.Scale(4)
+fmt.Println(*p1) // {4, 4}</pre></div>
+  
+
+  
+  <p>
+    What happens here?
+  </p>
+  
+
+  
+  <div class="code"><pre>p1 := Point{1, 1}
+p1.Scale(4)
+fmt.Println(p)</pre></div>
+  
+
+  
+  <p>
+    Go does an implicit *p or &amp;p conversion on <b>variables</b>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>String()</h3>
+        
+  
+  <p>
+    Go has a String() method to help with printing
+  </p>
+  
+
+  
+  <div class="code"><pre>func (c Celsius) String() string {
+    return fmt.Sprintf("%g°C", c)
+}</pre></div>
+  
+
+  
+  <p>
+    Works with:
+  </p>
+  
+
+  
+  <div class="code"><pre>fmt.Println(c)
+fmt.Println(c.String())
+fmt.Printf("%v", c)
+fmt.Printf("%s", c)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Composition by Struct Embedding</h3>
+        
+  
+  <div class="code"><pre>type Point struct {
+    X, Y float64
+}
+
+type Circle struct {
+    Point
+    Radius int
+}</pre></div>
+  
+
+  
+  <p>
+    Any Circle can access the methods of Point
+  </p>
+  
+
+  
+  <div class="code"><pre>var c Circle
+c.X = 2
+c.Y = 4
+c.Scale(4)
+fmt.Printf("%+v\n", c) // {Point:{X:8 Y:16} Radius:0}</pre></div>
+  
+
+  
+  <p>
+    The methods of Point are <b>promoted to</b> Circle
+  </p>
+  
+
+  
+  <p>
+    How do we handle encapsulation?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Method Values and Expressions</h3>
+        
+  
+  <p>
+    Method value: binds a method to a receiver value
+  </p>
+  
+
+  
+  <div class="code"><pre>distanceFromP := p.Distance
+fmt.Println(distanceFromP(q))</pre></div>
+  
+
+  
+  <p>
+    Method Expression
+  </p>
+  
+
+  
+  <div class="code"><pre>distance := Point.Distance
+fmt.Println(distance(p, q))</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Basic Testing</h3>
+        
+  
+  <p>
+    Use <code>go test</code>
+  </p>
+  
+
+  
+  <p>
+    Applies to files that end in "_test.go"
+  </p>
+  
+
+  
+  <p>
+    Test function syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>import "testing"
+
+func TestName(t *testing.T) {
+    //
+}</pre></div>
+  
+
+  
+  <p>
+    Must begin with "Test", the name of the rest of the function must begin with a capital letter
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Testing examples</h3>
+        
+  
+  <div class="code"><pre>func TestPalindromeSimple(t *testing.T) {
+    if !IsPalindrome("racecar") {
+        t.Error(`IsPalindrome("racecar") = false`)
+    }
+}
+
+func TestIsPalindrome(t *testing.T) {
+    var tests = []struct {
+        input string
+        want  bool
+    }{
+        {"", true},
+        {"a", true},
+        {"aa", true},
+        {"ab", false},
+    }
+    for _, test := range tests {
+        if got := IsPalindrome(test.input); got != test.want {
+            t.Errorf("IsPalindrome(%q) = %v", test.input, got)
+        }
+    }
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Homework 2</h3>
+        
+  <ul>
+  
+    <li>Object Oriented Programming</li>
+  
+    <li>Due on Canvas on Tuesday, February 7th at 11:59 PM</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article class="">
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+    <div class="slide-area" id="prev-slide-area"></div><div class="slide-area" id="next-slide-area"></div></section>
+
+    <div id="help" style="display: none;">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    <script src="./Object Oriented Programming_files/play.js"></script>
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  
+
+<script type="text/javascript">( function(){ window.SIG_EXT = {}; } )()</script><link rel="stylesheet" type="text/css" href="./Object Oriented Programming_files/css"><link rel="stylesheet" type="text/css" href="./Object Oriented Programming_files/styles.css"></body></html>
