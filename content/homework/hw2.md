@@ -8,7 +8,7 @@ the [Go documentation](https://golang.org/doc/).
 
 ## Exercises
 
-Complete the exercises in the `hw2.go` code file stub.
+Complete the exercises in the [`hw2.go`](/~cis193/homeworks/hw2.go) code file stub.
 
 Be sure that your code is run through `gofmt` and compiles successfully before
 submitting. You will be learning many Go best practices throughout the semester
