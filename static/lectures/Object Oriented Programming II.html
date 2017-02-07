@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)http://localhost:3999/lecture3.slide#1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Object Oriented Programming II</title>
+    
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src="/~cis193/static/slides.js"></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  <meta name="viewport" content="width=1100,height=750"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+  <body style="display: none" class="loaded">
+
+    <section class="slides layout-widescreen">
+
+      <article class="current">
+        <h1>Object Oriented Programming II</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article class="next">
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 2 (available on course website) is due tonight on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article class="far-next">
+      
+        <h2>Interfaces</h2>
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interfaces are Contracts</h3>
+        
+  
+  <p>
+    All of the types we've seen so far are concrete types
+  </p>
+  
+
+  
+  <p>
+    Interface types are abstract types
+<br>
+
+    - Doesn't expose the internal structure of its values
+<br>
+
+    - Only exposes some methods
+  </p>
+  
+
+  
+  <p>
+    Don't necessarily know what it is, just what it can do
+  </p>
+  
+
+  
+  <p>
+    More concretely, an interface is a named set containing method headers
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interface Syntax</h3>
+        
+  
+  <p>
+    An interface looks like this
+  </p>
+  
+
+  
+  <div class="code"><pre>type Runner interface {
+    Run(feet int)
+}</pre></div>
+  
+
+  
+  <p>
+    Runner is an interface type
+  </p>
+  
+
+  
+  <p>
+    We can define interfaces using interfaces and methods
+  </p>
+  
+
+  
+  <div class="code"><pre>type SprintRunner interface {
+    Runner
+    Sprint(feet int) (distance int)
+}</pre></div>
+  
+
+  
+  <p>
+    Typically end in "er"
+  </p>
+  
+
+  
+  <p>
+    Order doesn't matter for the methods inside
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Example Interface</h3>
+        
+  
+  <p>
+    Here's an interface we've seen before
+  </p>
+  
+
+  
+  <div class="code"><pre>package fmt
+
+type Stringer interface {
+    String() string
+}</pre></div>
+  
+
+  
+  <p>
+    The <code>fmt</code> package looks for types that satisfy Stringer and uses their <code>String()</code> method to print them
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interface Satisfaction</h3>
+        
+  
+  <p>
+    A type satisfies an interface if it has all of the methods the interface requires
+  </p>
+  
+
+  
+  <div class="code"><pre>func (c Celsius) String() string { 
+    return fmt.Sprintf("%f°C", c)
+}</pre></div>
+  
+
+  
+  <p>
+    Type Celsius satisfies Stringer
+  </p>
+  
+
+  
+  <p>
+    We say that Celsius is a Stringer
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interface Satisfaction</h3>
+        
+  
+  <p>
+    With interfaces, Type vs *Type matters when considering if a type has a method
+  </p>
+  
+
+  
+  <div class="code"><pre>func (c *Celsius) String() string { 
+    return fmt.Sprintf("%f°C", *c)
+}
+
+var c Celsius = 4.5</pre></div>
+  
+
+  
+  <p>
+    Celsius does not satisfy Stringer here - what happens when we do <code>fmt.Println(c)</code>?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interface Satisfaction</h3>
+        
+  
+  <p>
+    Only the methods revealed by the interface type may be called, even if the underlying concrete type has more
+  </p>
+  
+
+  
+  <div class="code"><pre>type Runner interface {
+    Run(feet int)
+}
+
+type Gopher struct {
+    name string
+}
+func (d Gopher) Bark(s string) { 
+    fmt.Println(s)
+}
+func (d Gopher) Run(feet int) { 
+    fmt.Printf("%s ran %d feet!\n", d.name, feet)
+}
+
+var d Runner
+d = Gopher{"Henry"}
+d.Run(23) // "Henry ran 23 feet!"
+d.Bark("woof woof") // d.Bark undefined (type Runner has no field or method Bark)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Empty Interfaces</h3>
+        
+  
+  <div class="code"><pre>var anything interface{}
+
+anything = 6
+anything = "hello"
+anything = false</pre></div>
+  
+
+  
+  <p>
+    This is how <code>fmt.Println()</code> (and other printing functions) can take any arguments
+  </p>
+  
+
+  
+  <p>
+    Non-empty interfaces are usually satisfied by a pointer type, especially with structs
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Interface Values</h3>
+        
+  
+  <p>
+    How is an interface actually stored?
+  </p>
+  
+
+  
+  <p>
+    An interface has two components, type and value
+  </p>
+  
+
+  
+  <div class="code"><pre>var w Runner // value = nil, type = nil
+
+w = Gopher{"Henry"} // value = Gopher{"Henry"}, type = Gopher</pre></div>
+  
+
+  
+  <p>
+    The type of an interface is the underlying dynamic type
+  </p>
+  
+
+  
+  <p>
+    Interface values can be compared using <code>==</code>
+<br>
+
+    - If both are nil, this returns true
+<br>
+
+    - If both dynamic types are equal and both dynamic values are equal, this returns true
+  </p>
+  
+
+  
+  <p>
+    Why doesn't this work?
+  </p>
+  
+
+  
+  <div class="code"><pre>var x interface{} = []int{1, 2}
+fmt.Println(x == x) // panic: comparing uncomparable types</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Example: Sorting via sort.Interface</h3>
+        
+  
+  <p>
+    The <code>sort</code> package provides in-place sorting of any ordered sequence
+  </p>
+  
+
+  
+  <div class="code"><pre>package sort
+
+type Interface interface {
+    Len() int
+    Less(i, j int) bool // i, j are indices of sequence elements
+    Swap(i, j int)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Type Assertions</h3>
+        
+  
+  <p>
+    Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>x.(T)</pre></div>
+  
+
+  
+  <p>
+    Type assertions are operations applied to an interface value
+  </p>
+  
+
+  
+  <p>
+    If T is a concrete type:
+<br>
+
+    - The type assertion checks if x's dynamic type is equal to T, panics otherwise
+<br>
+
+    - Extracts the concrete value from x
+  </p>
+  
+
+  
+  <p>
+    For example:
+  </p>
+  
+
+  
+  <div class="code"><pre>var r Runner
+r = Gopher{"Harry"}
+a1 := r.(Gopher) // successful, a is now Gopher{"Harry"}
+a2 := r.(Cat) // panic</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Type Assertions</h3>
+        
+  
+  <p>
+    If T is an interface type:
+<br>
+
+    - The type assertion checks whether x's dynamic type satisfies T - if yes, the result still has the same dynamic type and value, but the interface type is changed to T
+<br>
+
+    - Commonly used to make a different (usually larger) set of methods available
+  </p>
+  
+
+  
+  <div class="code"><pre>// Gopher has two methods, Run and Bark
+type Runner interface {
+    Run(feet int)
+}
+type Barker interface {
+    Bark(s string)
+}
+
+var r Runner
+r = Gopher{"Harry"}
+rb := r.(Barker)
+rb.Bark("meow") // prints "meow"
+rb.Run(23) // fails, rb is a Barker - no Run method</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Type Assertions</h3>
+        
+  
+  <p>
+    Checking the type without having a panic
+  </p>
+  
+
+  
+  <div class="code"><pre>var r Runner
+r = Gopher{"Harry"}
+a1, ok := r.(Gopher) // a is now Gopher{"Harry"}, ok = true
+a2, ok := r.(Cat) // a2 = nil, ok = false</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Type Switches</h3>
+        
+  
+  <p>
+    How do we extract the value from an empty interface?
+  </p>
+  
+
+  
+  <p>
+    Bad way:
+  </p>
+  
+
+  
+  <div class="code"><pre>func HandleUnknown(x interface{}) {
+    if _, ok := x.(int); ok {
+        fmt.Printf("%d\n", x)
+    } else if _, ok := x.(string); ok {
+        fmt.Printf("%s\n", x)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    Good way:
+  </p>
+  
+
+  
+  <div class="code"><pre>func HandleUnknown(x interface{}) {
+    switch x := x.(type) {
+    case int:
+        fmt.Printf("%d\n", x)
+    case string:
+        fmt.Printf("%s\n", x)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>File I/O</h3>
+        
+  
+  <p>
+    Simple I/O with <code>ioutil</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>import "io/ioutil"
+
+func main() {
+    // Read entire file
+    b, err := ioutil.ReadFile("input.txt")
+    if err != nil {
+        panic(err)
+    }
+
+    // Write entire file
+    err = ioutil.WriteFile("output.txt", b, 0644)
+    if err != nil {
+        panic(err)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    What's bad about loading the entire file into memory?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Provides buffered I/O
+  </p>
+  
+
+  
+  <p>
+    Creating a read buffer
+  </p>
+  
+
+  
+  <div class="code"><pre>import (
+    "bufio"
+    "io"
+    "os"
+)
+
+func main() {
+    // Open intput file
+    fi, err := os.Open("input.txt")
+    if err != nil {
+        panic(err)
+    }
+
+    // Read buffer
+    r := bufio.NewReader(fi)
+    ...
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Creating a write buffer
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    ...
+    // Open output file
+    fo, err := os.Create("output.txt")
+    if err != nil {
+        panic(err)
+    }
+
+    // Write buffer
+    w := bufio.NewWriter(fo)
+    ...
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Copying a file
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    // []byte buffer for each chunk
+    buf := make([]byte, 1024)
+    for {
+        n, err := r.Read(buf) // Read a chunk
+        if err != nil &amp;&amp; err != io.EOF {
+            panic(err)
+        }
+        if n == 0 {
+            break
+        }
+
+        // Write chunk
+        if _, err := w.Write(buf[:n]); err != nil {
+            panic(err)
+        }
+    }
+
+    if err = w.Flush(); err != nil {
+        panic(err)
+    }
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h2>More Functions</h2>
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Variadic Functions</h3>
+        
+  
+  <p>
+    A function that can be called with varying numbers of arguments (eg: <code>fmt.Println()</code>)
+  </p>
+  
+
+  
+  <div class="code"><pre>func product(vals ...int) int {
+    prod := 1
+    for _, val := range vals {
+        prod *= val
+    }
+    return prod
+}</pre></div>
+  
+
+  
+  <p>
+    <code>vals</code> is a slice here
+  </p>
+  
+
+  
+  <p>
+    If the arguments are already in a slice, place "..." after them
+  </p>
+  
+
+  
+  <div class="code"><pre>values := []int{1, 3, 4}
+product(values...) // 12</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Deferred Function Calls</h3>
+        
+  
+  <p>
+    An ordinary function or method call prefixed by the defer keyword
+  </p>
+  
+
+  
+  <p>
+    Evaluated when the statement is executed, but the actual call is <b>deferred</b> until the parent function is done
+  </p>
+  
+
+  
+  <p>
+    Multiple defers are executed in the reverse of the order in which they were deferred
+  </p>
+  
+
+  
+  <p>
+    Usually done with paired operations (eg: open/close) to make sure resources are released or some final action is always done
+  </p>
+  
+
+  
+  <div class="code"><pre>f, err := os.Open(filename)
+if err != nil {
+    return nil, err
+}
+defer f.Close()</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Panic</h3>
+        
+  
+  <p>
+    Normal execution stops, all deferred functions are executed, and the program crashes with a log message
+  </p>
+  
+
+  
+  <p>
+    <code>panic()</code> accepts any value as an argument
+  </p>
+  
+
+      
+      </article>
+  
+  
+
+      <article class="">
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+    <div class="slide-area" id="prev-slide-area"></div><div class="slide-area" id="next-slide-area"></div></section>
+
+    <div id="help" style="display: none;">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+        
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>

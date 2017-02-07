@@ -33,4 +33,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Object%20Oriented%20Programming.html">02 – Object Oriented Programming</a></td>
         <td><a href="/~cis193/homework/hw2/">HW02 – Object Oriented Programming</a></td>
     </tr>
+    <tr>
+        <td>3</td>
+        <td>2/7</td>
+        <td><a href="/~cis193/lectures/Object%20Oriented%20Programming%20II.html">03 – Object Oriented Programming II</a></td>
+        <td><a href="/~cis193/homework/hw3/">HW03 – Interfaces</a></td>
+    </tr>
 </table>
