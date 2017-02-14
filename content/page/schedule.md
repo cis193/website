@@ -39,4 +39,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Object%20Oriented%20Programming%20II.html">03 – Object Oriented Programming II</a></td>
         <td><a href="/~cis193/homework/hw3/">HW03 – Interfaces</a></td>
     </tr>
+    <tr>
+        <td>4</td>
+        <td>2/14</td>
+        <td><a href="/~cis193/lectures/Concurrency and Parallelism.html">04 – Concurrency and Parallelism</a></td>
+        <td>HW03 – Concurrency</td>
+    </tr>
 </table>

@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Concurrency and Parallelism</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>Concurrency and Parallelism</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 3 (available on course website) is due tonight on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>File I/O</h3>
+        
+  
+  <p>
+    Simple I/O with <code>ioutil</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>import &#34;io/ioutil&#34;
+
+func main() {
+    // Read entire file
+    b, err := ioutil.ReadFile(&#34;input.txt&#34;)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Write entire file
+    err = ioutil.WriteFile(&#34;output.txt&#34;, b, 0644)
+    if err != nil {
+        log.Fatal(err)
+    }
+}</pre></div>
+  
+
+  
+  <p>
+    What&#39;s bad about loading the entire file into memory?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Provides buffered I/O
+  </p>
+  
+
+  
+  <p>
+    Creating a read buffer
+  </p>
+  
+
+  
+  <div class="code"><pre>import (
+    &#34;bufio&#34;
+    &#34;io&#34;
+    &#34;os&#34;
+)
+
+func main() {
+    // Open intput file
+    fi, err := os.Open(&#34;input.txt&#34;)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Read buffer
+    r := bufio.NewReader(fi)
+    ...
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Creating a write buffer
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    ...
+    // Open output file
+    fo, err := os.Create(&#34;output.txt&#34;)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Write buffer
+    w := bufio.NewWriter(fo)
+    ...
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>File I/O with bufio</h3>
+        
+  
+  <p>
+    Copying a file
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    // []byte buffer for each chunk
+    buf := make([]byte, 1024)
+    for {
+        n, err := r.Read(buf) // Read a chunk
+        if err != nil &amp;&amp; err != io.EOF {
+            log.Fatal(err)
+        }
+        if n == 0 {
+            break
+        }
+
+        // Write chunk
+        if _, err := w.Write(buf[:n]); err != nil {
+            log.Fatal(err)
+        }
+    }
+
+    if err = w.Flush(); err != nil {
+        log.Fatal(err)
+    }
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency</h3>
+        
+  
+  <p>
+    A system where several processes are executing at the same time - potentially interacting with each other
+  </p>
+  
+
+  
+  <p>
+    Concurrency is about dealing with many things at the same time
+  </p>
+  
+
+  
+  <p>
+    Has more to do with system design than execution - concurrency is a design property of a program where two or more tasks can be in progress at the same time (but not necessarily executing at the same time)
+  </p>
+  
+
+  
+  <p>
+    Examples?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Parallelism</h3>
+        
+  
+  <p>
+    Computation where many calculations are being done simultaneously
+  </p>
+  
+
+  
+  <p>
+    Often used for situations where large problems can be divided into smaller ones, which are solved in parallel
+  </p>
+  
+
+  
+  <p>
+    Parallelism is doing lots of things at once - run-time property where two or more tasks are being executed simultaneously
+  </p>
+  
+
+  
+  <p>
+    Examples?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism</h3>
+        
+  
+  <div class="code"><pre>Concurrency != Parallelism</pre></div>
+  
+
+  
+  <p>
+    Concurrency is about dealing with lots of things at once, Parallelism is about doing lots of things at once
+  </p>
+  
+
+  
+  <p>
+    Concurrency is a way to structure a program by breaking it up into pieces that can execute independently
+  </p>
+  
+
+  
+  <p>
+    Concurrency can let us structure a problem in a way that may (or may not) be parallelizable
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    Example adapted from Rob Pike&#39;s talk <a href="https://talks.golang.org/2012/waza.slide" target="_blank">Concurrency is not parallelism</a>
+  </p>
+  
+
+  
+  <p>
+    <b>Problem:</b> Move a pile of obsolete books to the incinerator
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophersimple1.jpg">
+</div>
+
+  
+  <p>
+    What components make up this task?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    <b>Problem:</b> Move a pile of obsolete books to the incinerator
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophersimple1.jpg">
+</div>
+
+  
+  <p>
+    What components make up this task?
+  </p>
+  
+
+  
+  <p>
+    How can we speed this up?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    One solution: Add another gopher and cart!
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophersimple2.jpg">
+</div>
+
+  
+  <p>
+    The pile and incinerator will have bottlenecks - we need to add some sort of communication between the gophers
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    This is concurrent composition!
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophersimple4.jpg">
+</div>
+
+  
+  <p>
+    Is this parallel?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    The previous design isn&#39;t automatically parallel - however, it can automatically be made parallel
+  </p>
+  
+
+  
+  <p>
+    Concurrent designs aren&#39;t necessarily parallel, but can enable parallelism
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    Another concurrent design
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophercomplex1.jpg">
+</div>
+
+  
+  <p>
+    Each gopher has a specific simple task 
+  </p>
+  
+
+  
+  <p>
+    Potentially four times faster than the original one gopher design
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    We can now parallelize this system
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophercomplex2.jpg" height="340">
+</div>
+
+  
+  <p>
+    Is this necessarily parallel?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    There are lots of other concurrent designs
+  </p>
+  
+
+<div class="image">
+  <img src="images/gophercomplex4.jpg" height="340">
+</div>
+
+  
+  <p>
+    Once an efficient concurrent design has been made, parallelization can be added in
+  </p>
+  
+
+  
+  <p>
+    What does this example relate to?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency vs Parallelism Example</h3>
+        
+  
+  <p>
+    Substitute:
+  </p>
+  
+
+  <ul>
+  
+    <li>book pile = web content</li>
+  
+    <li>gopher = CPU</li>
+  
+    <li>cart = marshaling/rendering/networking</li>
+  
+    <li>incinerator = proxy/browser/consumer</li>
+  
+  </ul>
+
+  
+  <p>
+    We can think about this example as a concurrent design for a scalable web service
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Race Conditions</h3>
+        
+  
+  <p>
+    A situation where the program gives incorrect results for certain interleavings of the operations
+  </p>
+  
+
+  
+  <p>
+    In Go, this will happen with operations of multiple goroutines (more on these next week)
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Race Conditions Example</h3>
+        
+  
+  <div class="code"><pre>// Package bank implements a bank with one joint account.
+package bank
+
+var balance int
+
+func Deposit(amount int) { 
+    balance = balance &#43; amount 
+}
+
+func Balance() int { 
+    return balance 
+}</pre></div>
+  
+
+  
+  <p>
+    Any sequential calls to <code>Deposit</code> and <code>Balance</code> should give correct results
+  </p>
+  
+
+  
+  <p>
+    Are they always sequential?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Race Conditions Example</h3>
+        
+  
+  <p>
+    Let&#39;s add two functions for this joint account
+  </p>
+  
+
+  
+  <div class="code"><pre>func Rob() {
+    bank.Deposit(100)                                // R1
+    fmt.Println(&#34;Bank balance is &#34;, bank.Balance())  // R2
+}
+
+func Ken() {
+    bank.Deposit(200)                                // K
+}</pre></div>
+  
+
+  
+  <p>
+    Possible interleavings:
+  </p>
+  
+
+  <ul>
+  
+    <li>R1, R2, K</li>
+  
+    <li>K, R1, R2 </li>
+  
+    <li>R1, K, R2</li>
+  
+  </ul>
+
+  
+  <p>
+    Are there any issues with these orderings?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Race Conditions Example</h3>
+        
+  
+  <p>
+    Are there any more cases?
+  </p>
+  
+
+  
+  <p>
+    Break up Rob&#39;s deposit into two components: read and write
+  </p>
+  
+
+  
+  <div class="code"><pre>func Deposit(amount int) { 
+    balance = balance &#43; amount 
+}</pre></div>
+  
+
+  
+  <p>
+    Consider this ordering:
+  </p>
+  
+
+  
+  <div class="code"><pre>R1r    // balance(R1r) = 0
+K      // balance(K) = 200
+R1w    // balance(R1w) = balance(R1r) &#43; 100
+R2     &#34;Bank balance is 100&#34;</pre></div>
+  
+
+  
+  <p>
+    How can we prevent this?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Mutual Exclusion (mutex)</h3>
+        
+  
+  <p>
+    One potential solution: use mutual exclusion - only allow one concurrent process to access the shared variables at a time
+  </p>
+  
+
+  
+  <p>
+    Only the process with access to the &#34;token&#34; is allowed to do work
+  </p>
+  
+
+  
+  <p>
+    <b>Mutexes in Go</b>
+  </p>
+  
+
+  
+  <div class="code"><pre>func (m *Mutex) Lock()
+// Lock locks m. If the lock is already in use, the calling
+// goroutine blocks until the mutex is available.
+
+func (*Mutex) Unlock()
+// Unlock unlocks m. It is a run-time error if m is not locked on entry to Unlock.</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Mutex Example</h3>
+        
+  
+  <div class="code"><pre>import &#34;sync&#34;</pre></div>
+  
+
+  
+  <div class="code"><pre>var (
+  mu      sync.Mutex // guards balance
+  balance int
+)</pre></div>
+  
+
+  
+  <div class="code"><pre>func Deposit(amount int) {
+    mu.Lock()
+    balance = balance &#43; amount
+    mu.Unlock()
+}
+
+func Balance() int {
+    mu.Lock()
+    b := balance
+    mu.Unlock()
+    return b
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>sync.RWMutex</h3>
+        
+  
+  <p>
+    In the previous example, it is safe for two concurrent operations to access <code>Balance()</code>, as long as no <code>Deposit()</code> calls are being made
+  </p>
+  
+
+  
+  <p>
+    <code>sync.RWMutex</code> is a mutex that allows read-only operations to proceed in parallel with each other, but makes sure write operations have fully exclusive access
+  </p>
+  
+
+  
+  <p>
+    See <a href="https://golang.org/pkg/sync/#RWMutex" target="_blank">sync.RWMutex</a> for more details
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Interesting Aside: Timing functions</h3>
+        
+  
+  <p>
+    Use the <a href="https://golang.org/pkg/time/" target="_blank"><code>time</code> package</a>
+  </p>
+  
+
+  
+  <p>
+    Useful functions
+  </p>
+  
+
+  <ul>
+  
+    <li><code>time.Now()</code></li>
+  
+    <li><code>time.Since(t Time)</code></li>
+  
+  </ul>
+
+  
+  <p>
+    How to time a function?
+  </p>
+  
+
+  
+  <div class="code"><pre>func timerFunc(start time.Time, name string) {
+    elapsed := time.Since(start)
+    fmt.Printf(&#34;%s took %s\n&#34;, name, elapsed)
+}
+
+func SampleFunc() {
+    defer timerFunc(time.Now(), &#34;SampleFunc&#34;)
+    // ...
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 4</h3>
+        
+  <ul>
+  
+    <li>Concurrency</li>
+  
+    <li>Due on Canvas on Tuesday, February 21th at 11:59 PM</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>
