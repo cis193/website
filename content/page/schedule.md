@@ -43,6 +43,6 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>4</td>
         <td>2/14</td>
         <td><a href="/~cis193/lectures/Concurrency and Parallelism.html">04 – Concurrency and Parallelism</a></td>
-        <td>HW03 – Concurrency</td>
+        <td><a href="/~cis193/homework/hw4/">HW04 – Concurrency</a></td>
     </tr>
 </table>
