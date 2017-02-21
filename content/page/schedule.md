@@ -45,4 +45,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Concurrency and Parallelism.html">04 – Concurrency and Parallelism</a></td>
         <td><a href="/~cis193/homework/hw4/">HW04 – Concurrency</a></td>
     </tr>
+    <tr>
+        <td>5</td>
+        <td>2/21</td>
+        <td><a href="/~cis193/lectures/Goroutines and Channels.html">05 – Goroutines and Channels</a></td>
+        <td></td>
+    </tr>
 </table>
