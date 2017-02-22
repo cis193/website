@@ -49,6 +49,6 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>5</td>
         <td>2/21</td>
         <td><a href="/~cis193/lectures/Goroutines and Channels.html">05 – Goroutines and Channels</a></td>
-        <td></td>
+        <td><a href="/~cis193/homework/hw5/">HW05 – Goroutines</a></td>
     </tr>
 </table>
