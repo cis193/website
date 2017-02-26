@@ -51,4 +51,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Goroutines and Channels.html">05 – Goroutines and Channels</a></td>
         <td><a href="/~cis193/homework/hw5/">HW05 – Goroutines</a></td>
     </tr>
+    <tr>
+        <td>6</td>
+        <td>2/28</td>
+        <td>06 – HTTP, Web, and JSON</td>
+        <td>HW06 – Midsemester Survey</td>
+    </tr>
 </table>
