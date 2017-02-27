@@ -61,7 +61,7 @@ type Task interface {
 // You should return the result of a Task even if it errors.
 // Do not leave any pending goroutines. Make sure all goroutines are cleaned up
 // properly and any synchronizing mechanisms closed.
-func Fastest(tasks ...Task) (int, error) {
+func Fastest(input int, tasks ...Task) (int, error) {
 	// TODO
 	return 0, nil
 }
@@ -73,7 +73,7 @@ func Fastest(tasks ...Task) (int, error) {
 // their results in any order.
 // Do not leave any pending goroutines. Make sure all goroutines are cleaned up
 // properly and any synchronizing mechanisms closed.
-func MapReduce(reduce func(results []int) int, tasks ...Task) (int, error) {
+func MapReduce(input int, reduce func(results []int) int, tasks ...Task) (int, error) {
 	// TODO
 	return 0, nil
 }
