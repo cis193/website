@@ -1,5 +1,5 @@
 // Homework 5: Goroutines
-// Due February 28, 2017 at 11:59pm
+// Due March 3, 2017 at 11:59pm
 package main
 
 import "fmt"
