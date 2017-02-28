@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTTP, Web, and JSON</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>HTTP, Web, and JSON</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 5 (available on course website) is due tonight on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP</h3>
+        
+  
+  <p>
+    HTTP (Hyper Text Transfer Protocol) is a client-server protocol. Remember that a server is an application that <b>listens</b> for incoming <b>requests</b> from clients, and returns and appropriate <b>response</b>.
+  </p>
+  
+
+  
+  <p>
+    When you access a page on the web, you make an HTTP request to the webserver hosting the page, and you get the HTML from the server as a response.
+  </p>
+  
+
+  
+  <p>
+    HTTP has verbs such as GET, POST, DELETE, etc.
+  </p>
+  
+
+<div class="image">
+  <img src="images/http.png" width="450">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP Client</h3>
+        
+  
+  <p>
+    Making HTTP requests as a client in Go is simple. The <code>http</code> package is full of methods for making HTTP requests.
+  </p>
+  
+
+  
+  <div class="code"><pre>resp, err := http.Get(&#34;http://example.com/&#34;)
+...
+resp, err := http.Post(&#34;http://example.com/upload&#34;, &#34;image/jpeg&#34;, &amp;buf)
+...
+resp, err := http.PostForm(&#34;http://example.com/form&#34;,
+  url.Values{&#34;key&#34;: {&#34;Value&#34;}, &#34;id&#34;: {&#34;123&#34;}})</pre></div>
+  
+
+  
+  <p>
+    Variable <code>resp</code> is of type <code>*Response</code>, which has a <code>Status</code>, <code>Header</code>, <code>Body</code>, etc.
+  </p>
+  
+
+  
+  <div class="code"><pre>resp.Status        // &#34;200 OK&#34;
+resp.StatusCode    // 200
+resp.Proto         // &#34;HTTP/1.0&#34;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Reading HTTP Body</h3>
+        
+  
+  <p>
+    The response body (<code>resp.Body</code>) is an <code>io.ReadCloser</code>. To read the body, you must treat it like any other type with a Reader, like <a href="https://www.seas.upenn.edu/~cis193/lectures/Concurrency%20and%20Parallelism.html" target="_blank">files</a>.
+  </p>
+  
+
+  
+  <div class="code"><pre>type ReadCloser interface {
+  Reader
+  Closer
+}</pre></div>
+  
+
+  
+  <p>
+    After you are done reading the <code>Body</code>, you must <code>Close()</code> it. Why?
+  </p>
+  
+
+<div class="image">
+  <img src="https://talks.golang.org/2013/advconc/gopherswrench.jpg" width="400">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>HTTP Client Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP Server</h3>
+        
+  
+  <p>
+    Making a barebones HTTP server in Go is just as easy. The <code>http</code> package also comes with a fully-featured HTTP server.
+  </p>
+  
+
+  
+  <div class="code"><pre>http.HandleFunc(&#34;/bar&#34;, func(w http.ResponseWriter, r *http.Request) {
+  fmt.Fprintf(w, &#34;Hello, %q&#34;, html.EscapeString(r.URL.Path))
+})
+
+log.Fatal(http.ListenAndServe(&#34;:8080&#34;, nil))</pre></div>
+  
+
+  
+  <p>
+    <code>ResponseWriter</code> has a <code>Write([]byte)</code> method. What interface does it fulfill automatically?
+  </p>
+  
+
+<div class="image">
+  <img src="https://pbs.twimg.com/media/C3IGRZEUEAAgnsy.jpg" width="250">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>HTTP Server Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Web</h3>
+        
+  
+  <p>
+    The web is made up of HTML documents that are served over HTTP. We can use HTML responses and do HTML <b>templating</b> with the built-in <code>template</code> package.
+  </p>
+  
+
+  
+  <div class="code"><pre>var homeTemplate = template.Must(template.ParseFiles(&#34;home.html&#34;))
+
+func upload(w http.ResponseWriter, r *http.Request) {
+  homeTemplate.Execute(w, nil)
+}</pre></div>
+  
+
+<div class="image">
+  <img src="images/htmltemplate.jpg">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Web Page Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>JSON</h3>
+        
+  <ul>
+  
+    <li>JavaScript Object Notation</li>
+  
+    <li>Used as a transfer format for many APIs</li>
+  
+  </ul>
+
+  
+  <p>
+    Example:
+  </p>
+  
+
+  
+  <div class="code"><pre>{
+  &#34;id&#34;: 1,
+  &#34;name&#34;: &#34;A green door&#34;,
+  &#34;price&#34;: 12.50,
+  &#34;tags&#34;: [&#34;home&#34;, &#34;green&#34;]
+}</pre></div>
+  
+
+  
+  <p>
+    The equivalent native type in Go would be:
+  </p>
+  
+
+  
+  <div class="code"><pre>type Door struct {
+  ID    int
+  Name  string
+  Price float64
+  Tags  []string
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Motivation</h3>
+        
+  
+  <p>
+    The goal is to convert this
+  </p>
+  
+
+  
+  <div class="code"><pre>{
+  &#34;name&#34;:&#34;Gopher&#34;,
+  &#34;birthdate&#34;: &#34;2017/02/28&#34;,
+  &#34;shirt-size&#34;: &#34;XS&#34;
+}</pre></div>
+  
+
+  
+  <p>
+    into this
+  </p>
+  
+
+  
+  <div class="code"><pre>type Person struct {
+  Name string
+  Born time.Time
+  Size string
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Simple JSON Parsing</h3>
+        
+  
+  <div class="code"><pre>{
+  &#34;id&#34;: 1,
+  &#34;name&#34;: &#34;A green door&#34;,
+  &#34;price&#34;: 12.50,
+  &#34;tags&#34;: [&#34;home&#34;, &#34;green&#34;]
+}</pre></div>
+  
+
+  
+  <p>
+    Step 1: Add struct <b>tags</b>
+  </p>
+  
+
+  
+  <div class="code"><pre>type Door struct {
+    ID    int      `json:&#34;id&#34;`
+    Name  string   `json:&#34;name&#34;`
+    Price float64  `json:&#34;price&#34;`
+    Tags  []string `json:&#34;tags&#34;`
+}</pre></div>
+  
+
+  
+  <p>
+    This sets the key used for encoding and decoding JSON. If the tag is omitted, the default is the struct field name. (ex: &#34;Price&#34;)
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Encoding and Decoding</h3>
+        
+  
+  <p>
+    Use the <code>Marshal</code> and <code>Unmarshal</code> methods from the <code>json</code> package to convert back and forth between JSON as an array of bytes and its struct representation.
+  </p>
+  
+
+  
+  <p>
+    Encoding aka Marshaling
+  </p>
+  
+
+  
+  <div class="code"><pre>ourDoor := &amp;Door{
+    ID:    1,
+    Name:  &#34;A gray door&#34;,
+    Price: 24.99,
+    Tags:  []string{&#34;old&#34;, &#34;engineering&#34;},
+}
+jsonDoor, err := json.Marshal(ourDoor)</pre></div>
+  
+
+  
+  <p>
+    Decoding aka Unmarshaling
+  </p>
+  
+
+  
+  <div class="code"><pre>incomingDoor := []byte(`{&#34;id&#34;: 2, &#34;name&#34;: &#34;red door&#34;, &#34;price&#34;: 99.50, &#34;tags&#34;: []}`)
+newDoor := Door{}
+err := json.Unmarshal(incomingDoor, &amp;newDoor)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>JSON Parsing Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>What if I don&#39;t know the types?</h3>
+        
+  
+  <p>
+    Ideally, JSON should be structured enough that type checking will help you. However, this is not always this case.
+  </p>
+  
+
+  
+  <div class="code"><pre>{
+  &#34;doors&#34;: [
+    {
+      &#34;id&#34;: 1,
+      &#34;name&#34;: &#34;A green door&#34;
+    },
+    {
+      &#34;id&#34;: &#34;2&#34;,
+      &#34;name&#34;: [&#34;white and gold door&#34;, &#34;blue and black door&#34;]
+    }
+  ]
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Solution: use interface{}!</h3>
+        
+  
+  <p>
+    Whenever your data type is unknown, use an interface and runtime type conversions.
+  </p>
+  
+
+  
+  <div class="code"><pre>var data map[string]interface{}
+err := json.Unmarshal(incomingDoor, &amp;data)</pre></div>
+  
+
+  
+  <p>
+    Remember: <code>interface{}</code> requires type casting. See <a href="https://golang.org/doc/effective_go.html#type_switch" target="_blank">type switching</a> for a more sophisticated case of type conversions.
+  </p>
+  
+
+  
+  <div class="code"><pre>id := data[&#34;id&#34;]  // interface{} (wrong!)
+id&#43;&#43;  // invalid operation: id&#43;&#43; (non-numeric type interface {})
+
+id := data[&#34;id&#34;].(int)  // int (correct!)
+id&#43;&#43;  // =&gt; 3</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Custom Type Conversions</h3>
+        
+  
+  <p>
+    <code>json.Marshal</code> only knows how to convert some basic native types. What about our time.Time type in the original example?
+  </p>
+  
+
+  
+  <div class="code"><pre>type Person struct {
+  Name string
+  Born time.Time   //  &#34;2017/02/28&#34;
+  Size string
+}</pre></div>
+  
+
+  
+  <p>
+    Solution: Use a <code>map[string]string</code>, and convert types.
+  </p>
+  
+
+  
+  <p>
+    See the <a href="https://golang.org/pkg/encoding/json/" target="_blank"><code>json</code> documentation</a> for more details.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Dates in Go</h3>
+        
+  
+  <p>
+    Time formatting is based on a &#34;magic&#34; date:
+  </p>
+  
+
+  
+  <div class="code"><pre>Mon Jan 2 15:04:05 -0700 MST 2006
+0   1   2  3  4  5   7          6</pre></div>
+  
+
+<div class="image">
+  <img src="https://talks.golang.org/2015/json/img/mindblown.gif" height="400">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Date formatting usage</h3>
+        
+  
+  <p>
+    Simply order the &#34;magic&#34; date into the format that you want!
+  </p>
+  
+
+  
+  <div class="code"><pre>now := time.Now()
+
+fmt.Println(now)                         =&gt; 2017-02-28 10:44:46.584220595 -0500 EST
+fmt.Println(now.Format(&#34;1/2/06&#34;))        =&gt; 2/28/17
+fmt.Println(now.Format(&#34;2006-01-02&#34;))    =&gt; 2007-02-28</pre></div>
+  
+
+  
+  <p>
+    You can have arbitrary text in your date format strings as long as they don&#39;t conflict with the magic date keywords.
+  </p>
+  
+
+  
+  <div class="code"><pre>fmt.Println(now.Format(&#34;Today is Monday, January 2nd!&#34;))
+fmt.Println(now.Format(&#34;Alert: it is now 3pm and 4 minutes past the hour&#34;))</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Parsing dates</h3>
+        
+  
+  <p>
+    Parsing dates and times uses the same formatting style.
+  </p>
+  
+
+  
+  <div class="code"><pre>t, err := time.Parse(&#34;2 Jan, 3:04&#34;, &#34;28 Feb, 10:43&#34;)
+
+t.Year()  //  =&gt; 0</pre></div>
+  
+
+  
+  <p>
+    Any non-specified fields default to the zero (0) value!
+  </p>
+  
+
+<div class="image">
+  <img src="https://cdn-images-1.medium.com/max/743/1*CKsVcG6icfjsmoeoSJUrPQ.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Final JSON Parsing</h3>
+        
+  
+  <p>
+    Putting it all together, we have JSON unmarshaling, together with struct initialization, and date parsing.
+  </p>
+  
+
+  
+  <div class="code"><pre>fields := map[string]string{}
+err := json.Unmarshal(incomingJSON, &amp;fields)
+p := Person{}
+p.Name = fields[&#34;name&#34;]
+t, err := time.Parse(&#34;2006/01/02&#34;, fields[&#34;born&#34;])
+...
+p.Born = t
+p.Size = fields[&#34;size&#34;]</pre></div>
+  
+
+<div class="image">
+  <img src="https://blog.golang.org/6years-gopher.png" height="200">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Using JSON with HTTP</h3>
+        
+  
+  <p>
+    HTTP response bodies are not <code>string</code> or <code>[]byte</code>, they are <code>io.ReadCloser</code>.
+<br>
+
+    The <code>json</code> package has a <code>json.NewDecoder</code> method that takes in an <code>io.Reader</code>.
+  </p>
+  
+
+  
+  <p>
+    The <code>Decoder</code> has a <code>Decode</code> method that works very much like <code>Unmarshal</code>.
+  </p>
+  
+
+  
+  <div class="code"><pre>dec := json.NewDecoder(req.Body)
+if err := dec.Decode(&amp;person); err != nil {
+  return fmt.Errorf(&#34;decode person: %v&#34;, err)
+}</pre></div>
+  
+
+<div class="image">
+  <img src="https://itk.org/Doxygen/html/Streaming.gif">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 6</h3>
+        
+  <ul>
+  
+    <li>Midsemester survey!</li>
+  
+    <li>Complete by Tuesday, March 14</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>

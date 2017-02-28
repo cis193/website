@@ -54,7 +54,7 @@ This schedule will be filled as the semester progresses. Stay tuned!
     <tr>
         <td>6</td>
         <td>2/28</td>
-        <td>06 – HTTP, Web, and JSON</td>
+        <td><a href="/~cis193/lectures/HTTP, Web, and JSON.html">06 – HTTP, Web, and JSON</a></td>
         <td>HW06 – Midsemester Survey</td>
     </tr>
 </table>
