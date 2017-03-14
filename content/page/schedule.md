@@ -59,7 +59,7 @@ This schedule will be filled as the semester progresses. Stay tuned!
     </tr>
     <tr>
         <td>7</td>
-        <td>2/28</td>
+        <td>3/14</td>
         <td>Snow Day</td>
         <td><a href="/~cis193/homework/hw6/">HW06 – Midsemester Survey</a></td>
     </tr>
