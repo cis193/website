@@ -60,7 +60,7 @@ This schedule will be filled as the semester progresses. Stay tuned!
     <tr>
         <td>7</td>
         <td>3/14</td>
-        <td>Snow Day</td>
+        <td>Snow Day – No class</td>
         <td><a href="/~cis193/homework/hw6/">HW06 – Midsemester Survey</a></td>
     </tr>
 </table>
