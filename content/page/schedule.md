@@ -63,4 +63,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>Snow Day – No class</td>
         <td><a href="/~cis193/homework/hw6/">HW06 – Midsemester Survey</a></td>
     </tr>
+    <tr>
+        <td>8</td>
+        <td>3/21</td>
+        <td><a href="/~cis193/lectures/Web Programming.html">07 – Web Programming</a></td>
+        <td>HW07 – Scraping</td>
+    </tr>
 </table>

@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Programming</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>Web Programming</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 6 (available on course website) is due on March 21st on Canvas (there&#39;s a short quiz on Canvas to make sure you completed the survey) at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Introduction to Packages</h3>
+        
+  
+  <p>
+    Go code is organized into packages - we&#39;ve been using packages throughout the semester!
+  </p>
+  
+
+  
+  <p>
+    All of the files in a package are in the same directory
+  </p>
+  
+
+  
+  <div class="code"><pre>package main
+
+import (
+    &#34;fmt&#34;
+    &#34;strings&#34;
+    &#34;math/rand&#34;
+)
+
+func main() {
+    fmt.Println(rand.Int())
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Renaming imports</h3>
+        
+  
+  <p>
+    To rename an import, simply place the desired name before. This is important when the imported names clash.
+  </p>
+  
+
+  
+  <div class="code"><pre>import (
+    &#34;crypto/rand&#34;
+    mrand &#34;math/rand&#34;
+)</pre></div>
+  
+
+  
+  <p>
+    What happens if you import into <code>_</code>?
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Outside of the standard library</h3>
+        
+  
+  <p>
+    So far, we&#39;ve limited ourselves to packages included with the Go standard library.
+  </p>
+  
+
+  
+  <p>
+    We can use <code>go</code> <code>get</code> to install packages from the internet
+  </p>
+  
+
+  
+  <p>
+    The <code>GOPATH</code> environment variable tells the Go tool where your workspace is located.
+  </p>
+  
+
+  
+  <div class="code"><pre>go get github.com/dsymonds/fixhub/cmd/fixhub</pre></div>
+  
+
+  
+  <p>
+    The <code>go</code> <code>get</code> command fetches source repositories from the internet and places them in your workspace
+  </p>
+  
+
+<div class="image">
+  <img src="images/new-world.gif" width="400">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Choosing package versions</h3>
+        
+  
+  <p>
+    How do you choose what version of a package you want with <code>go</code> <code>get</code>?
+  </p>
+  
+
+  
+  <p>
+    Currently, you can&#39;t! Thus, there are several unofficial community-led projects to solve the Go versioning problem.
+  </p>
+  
+
+  <ul>
+  
+    <li><a href="https://github.com/golang/dep" target="_blank">dep</a> (most promising path to becoming official)</li>
+  
+    <li><a href="https://github.com/Masterminds/glide" target="_blank">Glide</a></li>
+  
+    <li><a href="https://github.com/tools/godep" target="_blank">Godep</a></li>
+  
+  </ul>
+
+  
+  <p>
+    All of these work on a <code>vendor</code> subdirectory and install packages there instead of in the global namespace, <code>$GOPATH/src</code>.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Other go subcommands</h3>
+        
+  
+  <p>
+    <code>go</code> <code>install</code> a local package and caches it in the <code>pkg</code> directory, similar to `go build`
+  </p>
+  
+
+  
+  <p>
+    <code>go</code> <code>list</code> lists the buildable Go packages in the current directory recursively
+  </p>
+  
+
+  
+  <p>
+    <code>go</code> <code>doc</code> shows documentation for the provided input, ex:
+  </p>
+  
+
+  
+  <div class="code"><pre>go doc fmt.Println</pre></div>
+  
+
+<div class="image">
+  <img src="https://talks.golang.org/2013/advconc/race.png" width="800">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>GOPATH Organization</h3>
+        
+  
+  <div class="code"><pre>$GOPATH/
+    bin/fixhub                              # installed binary
+    pkg/darwin_amd64/                       # compiled archives
+        github.com/...
+    src/                                    # source repositories
+        github.com/
+            golang/lint/...                 # used by package fixhub
+                .git
+            google/go-github/...            # used by package fixhub
+                .git
+            dsymonds/fixhub/
+                .git
+                client.go
+                cmd/fixhub/fixhub.go        # package main</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Commenting Your Code</h3>
+        
+  
+  <p>
+    Doc comments are before the declaration of an exported identifier:
+  </p>
+  
+
+  
+  <div class="code"><pre>// Join concatenates the elements of elem to create a single string.
+// The separator string sep is placed between elements in the resulting string.
+func Join(elem []string, sep string) string {</pre></div>
+  
+
+  
+  <p>
+    These are complete sentences beginning with the exact identifier. Everything public should be documented!
+  </p>
+  
+
+  
+  <p>
+    The <a href="https://blog.golang.org/godoc-documenting-go-code" target="_blank">godoc tool</a> extracts such comments and presents them on the web:
+  </p>
+  
+
+<div class="image">
+  <img src="images/godoc.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP</h3>
+        
+  
+  <p>
+    HTTP (Hyper Text Transfer Protocol) is a client-server protocol. Remember that a server is an application that <b>listens</b> for incoming <b>requests</b> from clients, and returns and appropriate <b>response</b>.
+  </p>
+  
+
+  
+  <p>
+    When you access a page on the web, you (the client) make an HTTP request to the webserver hosting the page, and you get the HTML from the server as a response.
+  </p>
+  
+
+  
+  <p>
+    HTTP is a protocol to communicate on the web
+  </p>
+  
+
+<div class="image">
+  <img src="images/http.png" width="450">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP Requests</h3>
+        
+  
+  <p>
+    Consists of <b>verbs</b> on resources:
+  </p>
+  
+
+  <ul>
+  
+    <li><b>GET:</b> Requests data from a specified resource (doesn&#39;t modify the server state)</li>
+  
+    <li><b>POST:</b> Submits data to be processed to a specified resource</li>
+  
+    <li>HEAD:	Same as GET but returns only HTTP headers and no document body</li>
+  
+    <li>PUT:	Uploads a representation of the specified URI</li>
+  
+    <li>DELETE:	Deletes the specified resource</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP Requests in Go</h3>
+        
+  
+  <p>
+    GET Requests
+  </p>
+  
+
+  
+  <div class="code"><pre>resp, err := http.Get(&#34;https://httpbin.org/get&#34;)
+defer resp.Body.Close()
+body, err := ioutil.ReadAll(resp.Body)</pre></div>
+  
+
+  
+  <p>
+    POST Requests
+  </p>
+  
+
+  <ul>
+  
+    <li>You can use <code>http.Post</code> or <code>http.PostForm</code>.</li>
+  
+  </ul>
+
+  
+  <p>
+    Sending Data
+  </p>
+  
+
+  <ul>
+  
+    <li>Encode data as a string</li>
+  
+    <li>Use <a href="https://golang.org/pkg/net/url/#Values" target="_blank"><code>url.Values</code></a> type</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Status Codes</h3>
+        
+  
+  <p>
+    The status code of a response object <code>resp</code> is given by <code>resp.StatusCode</code>
+  </p>
+  
+
+  <ul>
+  
+    <li><b>1xx</b>: Information responses. No actual response, but not an error</li>
+  
+    <li><b>2xx</b>: Success!</li>
+  
+    <li><b>3xx</b>: Redirection - make a new request. There are ways to handle this in the <a href="https://golang.org/pkg/net/http" target="_blank"><code>net/http</code></a> package</li>
+  
+    <li><b>4xx</b>: Client Error. You either sent an incorrect request, or don&#39;t have permission, or the resource doesn&#39;t exist</li>
+  
+    <li><b>5xx</b>: Server Error. Probably not your fault.</li>
+  
+  </ul>
+
+  
+  <p>
+    To actually check for HTTP status code errors in Go:
+  </p>
+  
+
+  
+  <div class="code"><pre>if resp.StatusCode != http.StatusOK {
+    // http.StatusOK == 200
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>APIs and JSON Overview</h3>
+        
+  
+  <p>
+    APIs, or Application Programming Interfaces, specify how to interact with a piece of software
+  </p>
+  
+
+  
+  <p>
+    Lots of services on the web provide APIs that usually communicate data in JSON
+  </p>
+  
+
+  
+  <p>
+    Remember JSON?
+  </p>
+  
+
+  
+  <div class="code"><pre>{
+    &#34;id&#34;: 1,
+    &#34;name&#34;: &#34;A green door&#34;,
+    &#34;price&#34;: 12.50,
+    &#34;tags&#34;: [&#34;home&#34;, &#34;green&#34;]
+}</pre></div>
+  
+
+  
+  <p>
+    Revisit the previous lecture for how to handle JSON in Go
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Introduction to HTML</h3>
+        
+  
+  <p>
+    HTML, or HyperText Markup Language, is a standardized format for the contents of a webpage
+  </p>
+  
+
+  
+  <p>
+    HTML documents are made of elements (tags) that have nested content and attributes
+  </p>
+  
+
+  
+  <p>
+    Most tags have an opening and closing tag
+  </p>
+  
+
+  
+  <div class="code"><pre>&lt;a href=&#34;http://www.google.com&#34;&gt;content&lt;/a&gt;</pre></div>
+  
+
+  
+  <p>
+    HTML documents form a tree-like structure, with &lt;html&gt; as the root
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>What is Web Scraping?</h3>
+        
+  
+  <p>
+    Since so much data is on the web, and some of it may not be available via a convenient API, web scraping is a means for programmatically extracting data from the web 
+  </p>
+  
+
+  
+  <p>
+    Web scraping can be done with several languages - what are some benefits of using Go?
+  </p>
+  
+
+  
+  <p>
+    There are several techniques and strategies for web scraping
+  </p>
+  
+
+  
+  <p>
+    To extract data from a page, you need to be familiar with the structure of the HTML document
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTML Example</h3>
+        
+  
+  <div class="code"><pre>&lt;html&gt;
+    &lt;h1&gt;I am a heading!&lt;/h1&gt;
+    &lt;div&gt;
+        &lt;p&gt;
+            &lt;a href=&#34;http://www.google.com&#34;&gt;Google&lt;/a&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+        &lt;a href=&#34;http://www.yahoo.com&#34;&gt;Yahoo&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;a href=&#34;http://www.bing.com&#34;&gt;Outside link&lt;/a&gt;
+    &lt;p&gt;Hi I am a paragraph and I am &lt;strong&gt;bold&lt;/strong&gt;&lt;/p&gt;
+&lt;/html&gt;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Extracting information from HTML with Go</h3>
+        
+  
+  <p>
+    We&#39;ll be using the <code>goQuery</code> package
+  </p>
+  
+
+  
+  <div class="code"><pre>go get github.com/PuerkitoBio/goquery</pre></div>
+  
+
+  
+  <p>
+    See the full documentation <a href="https://godoc.org/github.com/PuerkitoBio/goquery" target="_blank">here</a>
+  </p>
+  
+
+  
+  <p>
+    goQuery uses CSS selectors to manipulate HTML documents, inspired by jQuery, a popular Javascript library.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>CSS Selectors</h3>
+        
+  
+  <p>
+    Some examples:
+  </p>
+  
+
+  
+  <div class="code"><pre>&#34;p&#34; -&gt; Selects all &lt;p&gt; elements
+&#34;p, a&#34; -&gt; Selects all &lt;p&gt; and &lt;a&gt; elements
+&#34;.test-class&#34; -&gt; Selects all elements with class=&#34;test-class&#34;
+&#34;#test-id&#34; -&gt; Selects all elements with id=&#34;test-id&#34;
+&#34;p a&#34; -&gt; Selects all &lt;a&gt; elements inside &lt;p&gt; elements
+&#34;p &gt; a&#34; -&gt; Selects all &lt;a&gt; elements with parent &lt;p&gt;</pre></div>
+  
+
+  
+  <p>
+    A more complete guide is <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">here</a>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Basic Selections with goQuery</h3>
+        
+  
+  <div class="code"><pre>doc, err := goquery.NewDocument(&#34;http://metalsucks.net&#34;)
+// Error handling
+
+// Find the review items
+doc.Find(&#34;.sidebar-reviews article .content-block&#34;).Each(func(i int, s *goquery.Selection) {
+    // For each item found, get the band and title
+    band := s.Find(&#34;a&#34;).Text()
+    title := s.Find(&#34;i&#34;).Text()
+    fmt.Printf(&#34;Review %d: %s - %s\n&#34;, i, band, title)
+})</pre></div>
+  
+
+  
+  <p>
+    Equivalently, we can use <code>range</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>sel := doc.Find(&#34;.sidebar-reviews article .content-block&#34;)
+for i := range sel.Nodes {
+    band := sel.Eq(i).Find(&#34;a&#34;).Text()
+    title := sel.Eq(i).Find(&#34;i&#34;).Text()
+    fmt.Printf(&#34;Review %d: %s - %s\n&#34;, i, band, title)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 7</h3>
+        
+  <ul>
+  
+    <li>Web Scraping</li>
+  
+    <li>Complete by Tuesday, March 28</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>
