@@ -67,6 +67,6 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>8</td>
         <td>3/21</td>
         <td><a href="/~cis193/lectures/Web Programming.html">07 – Web Programming</a></td>
-        <td>HW07 – Scraping</td>
+        <td><a href="/~cis193/homework/hw7/">HW07 – Web Scraping</a></td>
     </tr>
 </table>
