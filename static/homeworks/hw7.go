@@ -90,7 +90,7 @@ type CountryData struct {
 // Feel free to make and use helper functions for this function. To help with testing this
 // function, we know from intelligence reports that the GDP for "Canada" is 1532343 and
 // the GDP for "Colombia" is 274135.
-func GetCountryGDP(country string) (int, err) {
+func GetCountryGDP(country string) (int, error) {
 	// TODO
 	return 0, nil
 }
