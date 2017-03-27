@@ -69,4 +69,10 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td><a href="/~cis193/lectures/Web Programming.html">07 – Web Programming</a></td>
         <td><a href="/~cis193/homework/hw7/">HW07 – Web Scraping</a></td>
     </tr>
+    <tr>
+        <td>9</td>
+        <td>3/28</td>
+        <td>08 – CLI and Regular Expressions</td>
+        <td>HW08 – CLI and Regex</td>
+    </tr>
 </table>
