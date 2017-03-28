@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CLI Applications and Regular Expressions</title>
+    <meta charset='utf-8'>
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  </head>
+
+  <body style='display: none'>
+
+    <section class='slides layout-widescreen'>
+
+      <article>
+        <h1>CLI Applications and Regular Expressions</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 7 (available on course website) is due on March 28th on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Command Line Applications</h3>
+        
+  
+  <p>
+    A command-line application, also known as a command-line interface (CLI) application, are programs that are designed to be used from a text-interface such as a shell inside a terminal.
+  </p>
+  
+
+  
+  <p>
+    CLIs usually take in inputs as arguments and flags/switches through a text interface.
+  </p>
+  
+
+  
+  <p>
+    CLIs are extremely powerful as they can offer many more options and can be automated and chained together with scripting.
+  </p>
+  
+
+  
+  <p>
+    <b>Ex</b>: Command Prompt in Windows, Terminal with <code>bash</code> in OSX and Linux.
+  </p>
+  
+
+  
+  <p>
+    Try: <a href="https://uni.xkcd.com/" target="_blank">uni.xkcd.com/</a>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Simple CLI Example</h3>
+        
+  
+  <p>
+    To get a command line argument, use <code>os.Args</code>, an array of the arguments.
+  </p>
+  
+
+  
+  <p>
+    The first argument is always the program name (<code>os.Args[0]</code>).
+  </p>
+  
+
+  
+  <div class="code"><pre>package main
+
+import (
+  &#34;fmt&#34;
+  &#34;os&#34;
+)
+
+func main() {
+  fmt.Printf(&#34;Hello, %s\n&#34;, os.Args[1])
+}</pre></div>
+  
+
+  
+  <p>
+    To call this, we say
+  </p>
+  
+
+  
+  <div class="code"><pre>$ ./hello Adel
+Hello, Adel</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>CLI Arguments</h3>
+        
+  
+  <p>
+    A command line argument is the simplest way to collect data from the CLI. It is simply a <code>[]string</code>, so it is unstructured.
+  </p>
+  
+
+  
+  <p>
+    For example, to get the rest of the command line arguments, we can edit our program to:
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+  fmt.Printf(&#34;Hello, %s\n&#34;, strings.Join(os.Args[1:], &#34; &#34;))
+}</pre></div>
+  
+
+  
+  <p>
+    So, to compare the original to our new program, we have:
+  </p>
+  
+
+  
+  <div class="code"><pre>$ ./hello Adel Qalieh
+Hello, Adel
+
+$ ./hello2 Adel Qalieh
+Hello, Adel Qalieh</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Building</h3>
+        
+  
+  <p>
+    To build and install a CLI to your system, simply run <code>go</code> <code>install</code>. This will install the binary into your <code>$GOPATH/bin</code> directory.
+  </p>
+  
+
+  
+  <div class="code"><pre>$ go install
+$ $GOPATH/bin/lec8 Prakhar
+Hello, Prakhar</pre></div>
+  
+
+  
+  <p>
+    And if your system <code>PATH</code> is correctly configured with your <code>$GOPATH/bin</code>, you should be able to call it directly:
+  </p>
+  
+
+  
+  <div class="code"><pre>$ lec8 Prakhar
+Hello, Prakhar</pre></div>
+  
+
+  
+  <p>
+    This makes it incredibly easy to make simple command line tools for your system.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Simple CLI Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Command Line Flags</h3>
+        
+  
+  <p>
+    What if you want structured data - numbers, booleans, required arguments, switches, etc?
+  </p>
+  
+
+  
+  <p>
+    Use the <code>flag</code> package!
+  </p>
+  
+
+  
+  <p>
+    The <code>flag</code> package supports basic CLI parsing. First add a flag
+  </p>
+  
+
+  
+  <div class="code"><pre>var times = flag.Int(&#34;times&#34;, 1, &#34;number of times to print hello&#34;)</pre></div>
+  
+
+  
+  <p>
+    Then make sure to parse the flags with <code>flag.Parse()</code>. Note that <code>times</code> is an <code>*int</code>!
+<br>
+
+    Also note that all arguments must come after all flags, and are accessed with <code>flag.Args</code> and <code>flag.Arg(i)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>func main() {
+    flag.Parse()
+    fmt.Println(*times)
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Creating custom flag</h3>
+        
+  
+  <p>
+    What if we want a type that is not defined in the <code>flag</code> package? We can define custom flags by fulfilling the <code>flag.Value</code> interface:
+  </p>
+  
+
+  
+  <div class="code"><pre>type Value interface {
+  String()
+  Set(string) error
+}</pre></div>
+  
+
+<div class="image">
+  <img src="https://s-media-cache-ak0.pinimg.com/originals/de/4d/af/de4daf20b7e43fc4bca3450d86a1a32c.png" height="300">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Flags Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Getting user input</h3>
+        
+  
+  <p>
+    To get input from a user in a command line application while the program is running, we need to make use of standard input. The simplest way is a utility function from the <code>fmt</code> package
+  </p>
+  
+
+  
+  <div class="code"><pre>var s string
+fmt.Scanln(&amp;s)</pre></div>
+  
+
+  
+  <p>
+    However, to get buffered input, we can use the <code>bufio</code> package in tandem with <code>os.Stdin</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>reader := bufio.NewReader(os.Stdin)
+text, err := reader.ReadString(&#39;\n&#39;)</pre></div>
+  
+
+  
+  <p>
+    Finally, we can use the formatting verbs to get structured data from user input:
+  </p>
+  
+
+  
+  <div class="code"><pre>var i int
+_, err := fmt.Scanf(&#34;%d\n&#34;, &amp;i)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Cross compilation</h3>
+        
+  
+  <p>
+    When you run <code>go</code> <code>build</code> or <code>go</code> <code>install</code>, the binary is built for your particular operating system and processor.
+  </p>
+  
+
+  
+  <p>
+    To build a binary for another platform, set the <code>GOOS</code> (operating system) and <code>GOARCH</code> (processor architecture) environment variables when running your build commands.
+<br>
+
+    The full list of environments is listed in the <a href="https://golang.org/doc/install/source#environment" target="_blank">Go documentation</a>
+  </p>
+  
+
+  
+  <div class="code"><pre>$ GOOS=linux GOARCH=386 go build test.go</pre></div>
+  
+
+<div class="image">
+  <img src="https://nathany.com/images/gopher-tagging.jpg" width="500">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Regular Expressions</h3>
+        
+  
+  <p>
+    Regular expressions (regex) are a way of matching or categorizing strings. They have their own arcane syntax but are used in a variety of contexts.
+  </p>
+  
+
+  
+  <p>
+    End goal: does this string match condition X? What part of the string matches? Can I extract the desired information from a block of text?
+  </p>
+  
+
+  
+  <p>
+    Go has an extremely robust and performant regular expression implementation that is <i>unmatched</i> by any other language regex implementation.
+  </p>
+  
+
+<div class="image">
+  <img src="https://imgs.xkcd.com/comics/perl_problems.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Basics</h3>
+        
+  
+  <p>
+    Most alphanumeric characters in regex will simply match that character. For example, the regex <code>`go`</code> matches all of the following strings:
+  </p>
+  
+
+  
+  <div class="code"><pre>golang
+gopher
+google
+hugo</pre></div>
+  
+
+  
+  <p>
+    Note that regex is (usually) case sensitive, so it will not match <code>Google</code>.
+  </p>
+  
+
+  
+  <p>
+    To define a regex in Go, always use raw strings using the backtick (<code>`</code>) character
+  </p>
+  
+
+  
+  <div class="code"><pre>goRegex := `go`</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Character Classes</h3>
+        
+  
+  <p>
+    What about non-verbatim cases, ie. any number or any letter? We use what are called &#34;character classes&#34;, or a category of characters that fall under an umbrella. Here are some common ones:
+  </p>
+  
+
+  <ul>
+  
+    <li><code>\d</code> - Decimal digits (0-9)</li>
+  
+    <li><code>\s</code> - Whitespace characters</li>
+  
+    <li><code>\S</code> - Non-whitespace characters</li>
+  
+    <li><code>\w</code> - Alphanumeric characters (A-Z, a-z, and 0-9)</li>
+  
+    <li><code>\W</code> - Non-alphanumeric characters</li>
+  
+    <li><code>\b</code> - Word boundary (whitespace between words)</li>
+  
+  </ul>
+
+  
+  <p>
+    The full regex syntax is described by <a href="https://github.com/google/re2/wiki/Syntax" target="_blank">RE2</a>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Operators</h3>
+        
+  
+  <p>
+    There are also operators to match a variable number of characters. All operators act on the syntax immediately before:
+  </p>
+  
+
+  <ul>
+  
+    <li><code>+</code> - occurs 1 or more times</li>
+  
+    <li><code>*</code> - occurs 0 or more times</li>
+  
+    <li><code>?</code> - occurs 0 or 1 times</li>
+  
+    <li><code>{n}</code> - occurs exactly <code>n</code> times</li>
+  
+    <li><code>{n,m}</code> - occurs between <code>n</code> and <code>m</code> times</li>
+  
+    <li><code>{n,}</code> - occurs at least <code>n</code> times</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Groups of characters</h3>
+        
+  <ul>
+  
+    <li><code>a|b</code> - &#34;or&#34; operator, matches either the regex on the left or the right</li>
+  
+    <li><code>[abc]</code> - match specific characters that are within the brackets, equivalent to &#34;a or b or c&#34;</li>
+  
+    <li><code>[^abc]</code> - exclude specific characters from match, equivalent to &#34;not (a or b or c)&#34;</li>
+  
+    <li><code>.</code> - &#34;wildcard&#34; character, matches any character</li>
+  
+  </ul>
+
+  
+  <p>
+    To match an actual period character <code>.</code> escape it with a backslash: <code>\.</code>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Capture Groups</h3>
+        
+  
+  <p>
+    To extract information, wrapping the desired information within parenthesis will put that match in a &#34;capture group&#34; which can be pulled out.
+  </p>
+  
+
+  
+  <p>
+    <i>Example</i>:
+<br>
+
+    <code>(IMG_\d+).jpg</code> will get filenames like <code>IMG_629.jpg</code> but only the part without the extension in the capture group (<code>IMG_629</code>)
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Regex Resources</h3>
+        
+  
+  <p>
+    Regex can be difficult to learn, easy to forget, and has much much more than we can cover in this class. Here are some resources if you want additional help.
+  </p>
+  
+
+  <ul>
+  
+    <li><a href="http://regexr.com/" target="_blank">RegExr</a> - online tool to quickly build and test regular expressions</li>
+  
+    <li><a href="https://regex101.com/" target="_blank">regex101</a> - online regex prototyping tool with Go-specific regex flavor</li>
+  
+    <li><a href="https://regexone.com/" target="_blank">RegexOne</a> - learn regular expressions with interactive exercises</li>
+  
+    <li><a href="https://txt2re.com/" target="_blank">txt2re</a> - regular expression generator</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="https://imgs.xkcd.com/comics/regex_golf.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Using the regexp library</h3>
+        
+  
+  <p>
+    Define a regexp with <code>regexp.Compile()</code>, which returns a <code>*Regexp</code>
+  </p>
+  
+
+  
+  <p>
+    Use methods on <code>*Regexp</code>:
+  </p>
+  
+
+  <ul>
+  
+    <li><code>MatchString(string)</code> <code>bool</code> - reports whether the string matches the regexp</li>
+  
+    <li><code>FindAllString(string,</code> <code>n</code> <code>int)</code> <code>[]string</code> - finds all matching strings in the expression, up to n matches</li>
+  
+  </ul>
+
+  
+  <p>
+    The 16 methods for identifying matched text can be matched by the regular expression
+  </p>
+  
+
+  
+  <div class="code"><pre>Find(All)?(String)?(Submatch)?(Index)?</pre></div>
+  
+
+  
+  <p>
+    See the <a href="https://golang.org/pkg/regexp/" target="_blank">regexp documentation</a> for full details on all the methods of <code>*Regexp</code>
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Regex Demo</h3>
+        
+<div class="image">
+  <img src="http://i.imgur.com/v1IVLkf.png" width="550">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Final Project</h3>
+        
+  <ul>
+  
+    <li>Can work individually or in groups of 2</li>
+  
+    <li>~10-20 hours of work per person</li>
+  
+    <li>Demos on last day of class (no final exam!)</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="https://talks.golang.org/2014/go4gophers/gophertraining.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Homework 8</h3>
+        
+  <ul>
+  
+    <li>CLI and Regex</li>
+  
+    <li>Complete by Tuesday, April 4</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+      </article>
+
+    </section>
+
+    <div id="help">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -72,7 +72,7 @@ This schedule will be filled as the semester progresses. Stay tuned!
     <tr>
         <td>9</td>
         <td>3/28</td>
-        <td>08 – CLI and Regular Expressions</td>
+        <td><a href="/~cis193/lectures/CLI Applications and Regular Expressions.html">08 – CLI and Regular Expressions</a></td>
         <td>HW08 – CLI and Regex</td>
     </tr>
 </table>
