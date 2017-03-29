@@ -6,7 +6,7 @@ Create a simple CLI and use regular expressions to complete the provided functio
 
 ## Exercises
 
-Complete the exercises in the `hw8.go` code file stub.
+Complete the exercises in the [`hw8.go`](/~cis193/homeworks/hw8.go) code file stub.
 
 Static analysis tools like `go vet` may help.
 
