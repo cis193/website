@@ -4,8 +4,6 @@ title = "Schedule"
 
 +++
 
-This schedule will be filled as the semester progresses. Stay tuned!
-
 <table class="schedule">
     <thead>
         <tr>
@@ -74,5 +72,29 @@ This schedule will be filled as the semester progresses. Stay tuned!
         <td>3/28</td>
         <td><a href="/~cis193/lectures/CLI Applications and Regular Expressions.html">08 – CLI and Regular Expressions</a></td>
         <td>HW08 – CLI and Regex</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>4/4</td>
+        <td>09 – Databases</td>
+        <td>Final Project Proposals</td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>4/11</td>
+        <td>10 – Image Processing and Debugging</td>
+        <td>Final Project</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>4/18</td>
+        <td>11 – Real World Go</td>
+        <td>Final Project</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>4/25</td>
+        <td>Final Project Presentations</td>
+        <td>Happy Finals!</td>
     </tr>
 </table>
