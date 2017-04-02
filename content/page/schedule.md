@@ -82,7 +82,7 @@ title = "Schedule"
     <tr>
         <td>11</td>
         <td>4/11</td>
-        <td>10 – Image Processing and Debugging</td>
+        <td>10 – Image Processing</td>
         <td>Final Project</td>
     </tr>
     <tr>
