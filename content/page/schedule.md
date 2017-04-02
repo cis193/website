@@ -71,7 +71,7 @@ title = "Schedule"
         <td>9</td>
         <td>3/28</td>
         <td><a href="/~cis193/lectures/CLI Applications and Regular Expressions.html">08 – CLI and Regular Expressions</a></td>
-        <td>HW08 – CLI and Regex</td>
+        <td><a href="/~cis193/homework/hw8/">HW08 – CLI and Regex</a></td>
     </tr>
     <tr>
         <td>10</td>
