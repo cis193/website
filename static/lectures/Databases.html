@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://localhost:3999/lecture9.slide#14 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Databases</title>
+    
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src='/~cis193/static/slides.js'></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  <meta name="viewport" content="width=1100,height=750"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+  <body style="display: none" class="loaded">
+
+    <section class="slides layout-widescreen">
+
+      <article>
+        <h1>Databases</h1>
+        <h3>CIS 193 – Go Programming</h3>
+        
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article>
+      
+        <h3>Course Logistics</h3>
+        
+  <ul>
+  
+    <li>Homework 8 (available on course website) is due on April 4th on Canvas at 11:59 PM</li>
+  
+    <li>Piazza Link: <a href="https://piazza.com/class/ixxxkc67kac4vp" target="_blank">piazza.com/class/ixxxkc67kac4vp</a></li>
+  
+    <li>Canvas Link: <a href="https://canvas.upenn.edu/courses/1350686" target="_blank">canvas.upenn.edu/courses/1350686</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Introduction to SQL</h3>
+        
+  
+  <p>
+    What is SQL?
+  </p>
+  
+
+  <ul>
+  
+    <li>Stand for Structured Query Language</li>
+  
+    <li>Used to let users query, manipulate and transform data from a relational database</li>
+  
+  </ul>
+
+  
+  <p>
+    What is a relational database?
+  </p>
+  
+
+  <ul>
+  
+    <li>A collection of related two dimensional tables - with named columns and rows of data</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="images/exploits_of_a_mom.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL Tables</h3>
+        
+  
+  <p>
+    Tables in a relational database can form and define relations between the data
+  </p>
+  
+
+  
+  <p>
+    Tables have a <i>schema</i>, which is the underlying skeleton structure of the database
+  </p>
+  
+
+  
+  <p>
+    Data Types
+  </p>
+  
+
+  <ul>
+  
+    <li>Columns correspond to distinct data types</li>
+  
+    <li>For example: CHAR(20), INTEGER, FLOAT, etc</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="images/table.gif">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Creating a Table</h3>
+        
+  
+  <p>
+    Here, we can specify the table name, columns names (with types), and other restrictions
+  </p>
+  
+
+  
+  <div class="code"><pre>CREATE TABLE movies (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    director TEXT,
+    year INTEGER, 
+    length_minutes INTEGER
+);</pre></div>
+  
+
+  
+  <p>
+    Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>column DataType TableConstraint DEFAULT default_value,</pre></div>
+  
+
+  
+  <p>
+    TableConstraint: For example, PRIMARY KEY, UNIQUE, NOT NULL, FOREIGN KEY, etc
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Inserting Rows</h3>
+        
+  
+  <div class="code"><pre>INSERT INTO boxoffice
+(movie_id, rating, sales_in_millions)
+VALUES (1, 9.9, 283742034 / 1000000),
+VALUES (2, 4.9, 563732214 / 1000000);</pre></div>
+  
+
+  
+  <p>
+    Specifying the columns is optional, otherwise it will follow the structure of the table
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Simple Queries</h3>
+        
+  
+  <p>
+    Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>SELECT column, another_column, …
+FROM mytable
+WHERE condition
+    AND/OR another_condition
+    AND/OR …;</pre></div>
+  
+
+  
+  <p>
+    For example, to get all the movies directed by Wes Anderson, we can do:
+  </p>
+  
+
+  
+  <div class="code"><pre>SELECT title, director FROM movies 
+WHERE director = "John Lasseter";</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Queries with Filtering and Sorting</h3>
+        
+  
+  <p>
+    Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>SELECT column, another_column, …
+FROM mytable
+WHERE condition(s)
+ORDER BY column ASC/DESC
+LIMIT num_limit OFFSET num_offset;L</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Deleting and Updating</h3>
+        
+  
+  <p>
+    Delete Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>DELETE FROM mytable
+WHERE condition;</pre></div>
+  
+
+  
+  <p>
+    Update Syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>UPDATE mytable
+SET column = value_or_expr, 
+    other_column = another_value_or_expr, 
+    …
+WHERE condition;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h2>Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>SQL: Intro to Joins</h3>
+        
+  
+  <p>
+    Used for multi-table queries
+  </p>
+  
+
+  <ul>
+  
+    <li>Tables can share information about the same entity</li>
+  
+    <li>They use a primary key that identifies that entity uniquely across the database </li>
+  
+  </ul>
+
+  
+  <p>
+    Syntax of an inner join:
+  </p>
+  
+
+  
+  <div class="code"><pre>SELECT column, another_table_column, …
+FROM mytable
+INNER JOIN another_table 
+    ON mytable.id = another_table.id
+WHERE condition(s)
+ORDER BY column, … ASC/DESC
+LIMIT num_limit OFFSET num_offset;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="far-past">
+      
+        <h3>Using SQL in golang</h3>
+        
+  
+  <p>
+    You can use this SQL knowledge with Go to interact with databases with <b>database/sql</b>
+  </p>
+  
+
+  
+  <div class="code"><pre>import (
+    "database/sql"
+    _ "github.com/go-sql-driver/mysql" // or some other driver
+)</pre></div>
+  
+
+  
+  <p>
+    This package supports SQL syntax
+  </p>
+  
+
+  
+  <div class="code"><pre>db, err := sql.Open("sqlite3", "./test.db")
+defer db.Close()
+
+_, err = db.Exec("CREATE TABLE movie_info ( id INTEGER, name VARCHAR(32), rating FLOAT )")
+
+rows, err := db.Query("SELECT * FROM movie_info")</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="past">
+      
+        <h2>Demo</h2>
+      
+      </article>
+  
+  
+  
+      <article class="current">
+      
+        <h3>Introduction to ORM</h3>
+        
+  
+  <p>
+    Object-relational mapping is a way of converting data between native data structures from different languages. Translation: "object" = your programming language, "relational" = your relational database, and "mapping" = the bridge between them.
+  </p>
+  
+
+  
+  <p>
+    In this case, we are talking about converting between Go types and SQL types.
+  </p>
+  
+
+<div class="image">
+  <img src="images/Aw6NNFE.png" height="380">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article class="next">
+      
+        <h3>ORM Packages</h3>
+        
+  
+  <p>
+    There is no standard ORM in the standard library. Here are some options:
+  </p>
+  
+
+  <ul>
+  
+    <li><b>GORM</b>: <a href="http://jinzhu.me/gorm/" target="_blank">jinzhu.me/gorm/</a></li>
+  
+    <li>XORM: <a href="http://xorm.io/" target="_blank">xorm.io/</a></li>
+  
+    <li>Go Relational Persistence (gorp): <a href="https://github.com/go-gorp/gorp" target="_blank">github.com/go-gorp/gorp</a></li>
+  
+    <li>pg: <a href="https://github.com/go-pg/pg" target="_blank">github.com/go-pg/pg</a></li>
+  
+    <li>sqlx: <a href="https://github.com/jmoiron/sqlx" target="_blank">github.com/jmoiron/sqlx</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article class="far-next">
+      
+        <h3>Getting started with GORM</h3>
+        
+  
+  <p>
+    <b>Install</b>
+  </p>
+  
+
+  
+  <div class="code"><pre>go get -u github.com/jinzhu/gorm</pre></div>
+  
+
+  
+  <p>
+    <b>Import</b>
+  </p>
+  
+
+  
+  <p>
+    Choose a SQL dialect, in this case SQLite. Good options include SQLite, MySQL, and PostgreSQL.
+  </p>
+  
+
+  
+  <div class="code"><pre>import (
+    "github.com/jinzhu/gorm"
+    _ "github.com/jinzhu/gorm/dialects/sqlite"
+)</pre></div>
+  
+
+  
+  <p>
+    <b>Connect to database</b>
+  </p>
+  
+
+  
+  <p>
+    The parameters use depend entirely on your dialect. See the <a href="http://jinzhu.me/gorm/database.html#connecting-to-a-database" target="_blank">GORM documentation</a>.
+  </p>
+  
+
+  
+  <div class="code"><pre>db, err := gorm.Open("sqlite3", "/tmp/gorm.db")
+defer db.Close()</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Using GORM with Go types</h3>
+        
+  
+  <p>
+    <b>Embed Struct</b>
+  </p>
+  
+
+  
+  <div class="code"><pre>type Product struct {
+    gorm.Model
+    Name  string
+    Price uint
+}</pre></div>
+  
+
+  
+  <p>
+    <code>gorm.Model</code> provides the fields <code>ID</code>, <code>CreatedAt</code>, <code>UpdatedAt</code>, and <code>DeletedAt</code>
+  </p>
+  
+
+  
+  <p>
+    <b>Struct tags</b>
+  </p>
+  
+
+  
+  <p>
+    Use struct tags to designate column types. There are many options, see documentation.
+  </p>
+  
+
+  
+  <div class="code"><pre>type Product struct {
+    gorm.Model
+    Name  string `gorm:"size:255"`
+    Price uint
+}</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Basic CRUD Usage</h3>
+        
+  
+  <p>
+    To add data to your database, simply use <code>db.Create(...)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>product := Product{Name: "DigitalOcean Basic Droplet", Price: 5}
+db.Create(&amp;product)</pre></div>
+  
+
+  
+  <p>
+    To query for data from the database, use <code>db.First(...)</code> and <code>db.Find(...)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>var product Product
+db.First(&amp;product)</pre></div>
+  
+
+  
+  <p>
+    To make sophisticated queries, you can use plain SQL or struct/maps.
+  </p>
+  
+
+  
+  <div class="code"><pre>db.Where("name = ?", "Amazon Web Services").First(&amp;product)
+db.Where(&amp;Product{Name: "Amazon Web Services").First(&amp;product)
+db.Where(map[string]interface{}{"name": "Amazon Web Services"}).First(&amp;product)</pre></div>
+  
+
+  
+  <p>
+    These 3 methods are equivalent and result in the exact same SQL query:
+  </p>
+  
+
+  
+  <div class="code"><pre>SELECT * FROM products WHERE name = "Amazon Web Services" LIMIT 1;</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Basic CRUD Usage</h3>
+        
+  
+  <p>
+    To delete an entry from the database, use <code>db.Delete(...)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>db.Delete(&amp;product)</pre></div>
+  
+
+  
+  <p>
+    To update a model, use <code>db.Save(...)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>product.Price = 120
+db.Save(&amp;product)</pre></div>
+  
+
+  
+  <p>
+    To update a single field, there is a shortcut: <code>model.Update(field, value)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>db.Model(&amp;product).Update("price", 80)</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Associations</h3>
+        
+  
+  <p>
+    The biggest advantage of an ORM is with linked models. Relational databases are best with related models (duh!).
+  </p>
+  
+
+  
+  <p>
+    There are many types of relationships - belongs to, has many, many to many, etc.
+  </p>
+  
+
+  
+  <p>
+    To actually use these, refer to the GORM documentation. Here's a simple example:
+  </p>
+  
+
+  
+  <div class="code"><pre>type User struct {
+    gorm.Model
+    Products []Product
+}
+
+db.Model(&amp;user).Related(&amp;products)</pre></div>
+  
+
+  
+  <p>
+    In this example, a user has many products, but the products do not belong in any way to a user. Thus, we can implement a "cart" feature to the user by adding a "has many" type relationship.
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Database Migrations</h3>
+        
+  
+  <p>
+    What if your database schema changes?
+  </p>
+  
+
+  
+  <p>
+    Hint: It <i>always</i> changes!
+  </p>
+  
+
+  
+  <p>
+    To migrate the schema of the current type's definition, use <code>db.AutoMigrate(...)</code>
+  </p>
+  
+
+  
+  <div class="code"><pre>db.AutoMigrate(&amp;Product{})</pre></div>
+  
+
+  
+  <p>
+    You can also migrate multiple models at once:
+  </p>
+  
+
+  
+  <div class="code"><pre>db.AutoMigrate(&amp;Product{}, &amp;User{})</pre></div>
+  
+
+  
+  <p>
+    <b>Important</b>: the table name is the <i>pluralized</i> version of the struct name. For example, <code>Product</code> will have table name <code>products</code>.
+  </p>
+  
+
+  
+  <p>
+    <b>Important</b>: <code>AutoMigrate</code> will only create tables, columns, and indexes, but will not make any other changes automatically (ex: deleting a column).
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Final Project</h3>
+        
+  <ul>
+  
+    <li>Can work individually or in groups of 2</li>
+  
+    <li>~10-20 hours of work per person</li>
+  
+    <li>Demos on last day of class (no final exam!)</li>
+  
+  </ul>
+
+<div class="image">
+  <img src="images/gophertraining.png">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article class="">
+      
+        <h3>Homework 9</h3>
+        
+  <ul>
+  
+    <li>Final Project Proposals</li>
+  
+    <li>Complete by Tuesday, April 11</li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+
+      <article class="">
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Prakhar Bhandari, Adel Qalieh
+  </p>
+  
+
+  
+  <p>
+    CIS 193
+  </p>
+  
+<p class="link"><a href="https://seas.upenn.edu/~cis193/" target="_blank">https://seas.upenn.edu/~cis193/</a></p>
+          </div>
+        
+      </article>
+
+    <div class="slide-area" id="prev-slide-area"></div><div class="slide-area" id="next-slide-area"></div></section>
+
+    <div id="help" style="display: none;">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  </body>
+</html>
