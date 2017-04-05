@@ -77,7 +77,7 @@ title = "Schedule"
         <td>10</td>
         <td>4/4</td>
         <td><a href="/~cis193/lectures/Databases.html">09 – Databases</a></td>
-        <td>Final Project Proposals</td>
+        <td><a href="/~cis193/homework/hw9/">Final Project Proposals</a></td>
     </tr>
     <tr>
         <td>11</td>
