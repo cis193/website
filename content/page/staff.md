@@ -8,9 +8,9 @@ title = "Staff"
 <img src="/~cis193/images/prakhar.jpg" class="staff" alt="Adel Qalieh">  
 Prakhar Bhandari  
 [prakharb@seas.upenn.edu](mailto:prakharb@seas.upenn.edu)  
-Office Hours: Thu 3–5pm, Moore 100B  
+Office Hours: By Appointment  
 
 <img src="/~cis193/images/adel.jpg" class="staff" alt="Adel Qalieh">  
 Adel Qalieh  
 [adelq@seas.upenn.edu](mailto:adelq@seas.upenn.edu)  
-Office Hours: TBD  
+Office Hours: By Appointment  
