@@ -82,6 +82,7 @@ title = "Schedule"
     <tr>
         <td>11</td>
         <td>4/11</td>
+        <td><a href="/~cis193/lectures/Image Processing.html">10 – Image Processing</a></td>
         <td>10 – Image Processing</td>
         <td>Final Project</td>
     </tr>
